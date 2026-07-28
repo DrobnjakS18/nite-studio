@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NITÉ — Handcrafted Bags</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <!-- NAV -->
+      <header id="site-header">
+        <div class="nav-bar" id="navBar">
+          <a
+            href="#hero"
+            aria-label="NITÉ, handcrafted bags"
+            class="close-menu logo-link"
+          >
+            <svg viewBox="0 0 400 400" fill="none" class="logo-svg">
+              <circle
+                cx="200"
+                cy="200"
+                r="188"
+                stroke="var(--brass)"
+                stroke-width="3.4"
+              />
+              <text
+                x="200"
+                y="243"
+                text-anchor="middle"
+                font-family="'Bodoni Moda',Georgia,serif"
+                font-size="112"
+                font-weight="500"
+                letter-spacing="10"
+                fill="var(--brass)"
+              >
+                NITÉ
+              </text>
+            </svg>
+          </a>
+          <button id="burger" aria-label="Menu" class="nav-burger">
+            <span class="bar bar-top"></span>
+            <span class="bar bar-mid"></span>
+            <span class="bar bar-bot"></span>
+          </button>
+          <nav class="nav-links" id="navLinks">
+            <a href="#collection" class="close-menu nav-link">Collection</a>
+            <a href="#cacao" class="close-menu nav-link">Cacao</a>
+            <a href="#foret" class="close-menu nav-link">Forêt</a>
+            <a href="#rubis" class="close-menu nav-link">Rubis</a>
+            <a href="#nuage" class="close-menu nav-link">Nuage</a>
+            <a href="#maree" class="close-menu nav-link">Marée</a>
+            <a href="#made" class="close-menu nav-link">Made by hand</a>
+          </nav>
+        </div>
+      </header>
+
+      <!-- SECTION 1 — HERO -->
+      <section id="hero">
+        <div class="hero-inner">
+          <svg viewBox="0 0 400 400" fill="none" class="hero-logo">
+            <circle
+              cx="200"
+              cy="200"
+              r="188"
+              stroke="var(--brass)"
+              stroke-width="2.2"
+              stroke-dasharray="2400"
+              class="hero-logo-circle"
+            />
+            <text
+              x="200"
+              y="250"
+              text-anchor="middle"
+              font-family="'Bodoni Moda',Georgia,serif"
+              font-size="116"
+              font-weight="500"
+              letter-spacing="10"
+              fill="var(--brass)"
+              class="hero-logo-text"
+            >
+              NITÉ
+            </text>
+            <g class="hero-logo-tag">
+              <line
+                x1="88"
+                y1="283"
+                x2="184"
+                y2="283"
+                stroke="var(--brass)"
+                stroke-width="2.2"
+              />
+              <line
+                x1="216"
+                y1="283"
+                x2="312"
+                y2="283"
+                stroke="var(--brass)"
+                stroke-width="2.2"
+              />
+              <circle cx="200" cy="283" r="6.5" fill="var(--brass)" />
+              <text
+                x="200"
+                y="316"
+                text-anchor="middle"
+                textLength="215"
+                lengthAdjust="spacing"
+                font-family="'Inter',sans-serif"
+                font-size="17"
+                font-weight="500"
+                fill="var(--brass)"
+              >
+                HANDCRAFTED BAGS
+              </text>
+            </g>
+          </svg>
+          <div class="hero-kicker">
+            Hand-crocheted, one thread at a time
+          </div>
+          <p class="hero-sub">
+            Made to order in Belgrade. Choose your color.
+          </p>
+        </div>
+
+        <!-- HERO SLIDER -->
+        <div class="hero-slider">
+          <div class="slider-viewport">
+            <div id="sliderTrack" class="slider-track">
+              <a href="#cacao" data-slide="0" class="slide">
+                <img
+                  src="assets/cacao.jpg"
+                  alt="Cacao bag"
+                  class="slide-img"
+                />
+                <span class="slide-caption">Cacao</span>
+              </a>
+              <a href="#foret" data-slide="1" class="slide">
+                <img
+                  src="assets/foret.jpg"
+                  alt="Forêt bag"
+                  class="slide-img"
+                />
+                <span class="slide-caption">Forêt</span>
+              </a>
+              <a href="#rubis" data-slide="2" class="slide">
+                <img
+                  src="assets/rubis.jpg"
+                  alt="Rubis bag"
+                  class="slide-img slide-img--rubis"
+                />
+                <span class="slide-caption">Rubis</span>
+              </a>
+              <a href="#nuage" data-slide="3" class="slide">
+                <img
+                  src="assets/nuage.jpg"
+                  alt="Nuage clutch"
+                  class="slide-img slide-img--nuage"
+                />
+                <span class="slide-caption">Nuage</span>
+              </a>
+              <a href="#maree" data-slide="4" class="slide">
+                <img
+                  src="assets/maree.jpg"
+                  alt="Marée bag"
+                  class="slide-img"
+                />
+                <span class="slide-caption">Marée</span>
+              </a>
+            </div>
+
+            <button
+              id="prevBtn"
+              aria-label="Previous piece"
+              class="slider-arrow slider-arrow--prev"
+            >
+              <svg
+                width="20"
+                height="10"
+                viewBox="0 0 20 10"
+                fill="none"
+                class="arrow-svg arrow-svg--prev"
+              >
+                <line x1="0" y1="5" x2="18" y2="5" />
+                <path d="M14 1.5 L18 5 L14 8.5" />
+              </svg>
+            </button>
+            <button
+              id="nextBtn"
+              aria-label="Next piece"
+              class="slider-arrow slider-arrow--next"
+            >
+              <svg
+                width="20"
+                height="10"
+                viewBox="0 0 20 10"
+                fill="none"
+                class="arrow-svg"
+              >
+                <line x1="0" y1="5" x2="18" y2="5" />
+                <path d="M14 1.5 L18 5 L14 8.5" />
+              </svg>
+            </button>
+          </div>
+
+          <div id="sliderDots" class="slider-dots">
+            <button class="dot" data-dot="0" aria-label="Cacao"></button>
+            <button class="dot" data-dot="1" aria-label="Forêt"></button>
+            <button class="dot" data-dot="2" aria-label="Rubis"></button>
+            <button class="dot" data-dot="3" aria-label="Nuage"></button>
+            <button class="dot" data-dot="4" aria-label="Marée"></button>
+          </div>
+          <div class="slider-hint">
+            Select a piece to see it in full
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2 — MANIFESTO -->
+      <section id="manifesto">
+        <div data-reveal="1" class="manifesto-inner">
+          <h2 class="section-title-lg">From thread, everything.</h2>
+          <div aria-hidden="true" class="divider"></div>
+          <p class="manifesto-text">
+            Nité comes from the word for thread. Every bag begins as a single
+            length of cotton ribbon and ends as something that holds its shape,
+            holds its weight, and holds the marks of the hand that made it.
+          </p>
+          <div class="eyebrow">No two are identical</div>
+        </div>
+      </section>
+
+      <!-- SECTION 3 — COLLECTION INDEX -->
+      <section id="collection">
+        <div class="collection-head">
+          <div class="collection-kicker">The Collection</div>
+          <p class="collection-desc">
+            Five pieces. Each one made to order, each one available in any
+            color.
+          </p>
+        </div>
+        <div data-reveal="1" class="collection-grid">
+          <a href="#cacao" class="collection-item">
+            <div class="collection-img-wrap">
+              <img
+                class="collection-img collection-item-img"
+                src="assets/cacao.jpg"
+                alt="Cacao bag"
+              />
+            </div>
+            <div class="collection-item-name">Cacao</div>
+            <div class="collection-item-num">Piece Nº 01</div>
+          </a>
+          <a href="#foret" class="collection-item">
+            <div class="collection-img-wrap">
+              <img
+                class="collection-img collection-item-img"
+                src="assets/foret.jpg"
+                alt="Forêt bag"
+              />
+            </div>
+            <div class="collection-item-name">Forêt</div>
+            <div class="collection-item-num">Piece Nº 02</div>
+          </a>
+          <a href="#rubis" class="collection-item">
+            <div class="collection-img-wrap">
+              <img
+                class="collection-img collection-item-img collection-item-img--rubis"
+                src="assets/rubis.jpg"
+                alt="Rubis bag"
+              />
+            </div>
+            <div class="collection-item-name">Rubis</div>
+            <div class="collection-item-num">Piece Nº 03</div>
+          </a>
+          <a href="#nuage" class="collection-item">
+            <div class="collection-img-wrap">
+              <img
+                class="collection-img collection-item-img"
+                src="assets/nuage.jpg"
+                alt="Nuage clutch"
+              />
+            </div>
+            <div class="collection-item-name">Nuage</div>
+            <div class="collection-item-num">Piece Nº 04</div>
+          </a>
+          <a href="#maree" class="collection-item">
+            <div class="collection-img-wrap">
+              <img
+                class="collection-img collection-item-img"
+                src="assets/maree.jpg"
+                alt="Marée bag"
+              />
+            </div>
+            <div class="collection-item-name">Marée</div>
+            <div class="collection-item-num">Piece Nº 05</div>
+          </a>
+        </div>
+      </section>
+
+      <!-- BAG Nº 01 — CACAO -->
+      <section id="cacao" class="bag-section">
+        <div data-reveal="1" class="bag-inner">
+          <div class="bag-kicker">Piece Nº 01</div>
+          <h2 class="bag-title">Cacao</h2>
+          <p class="bag-desc">
+            A rounded hobo with a single wide handle that sits close to the
+            shoulder. The stitch is left dense and irregular so the surface
+            catches light differently from every angle.
+          </p>
+          <div
+            class="lightbox-trigger bag-image-wrap"
+            data-src="assets/cacao.jpg"
+            data-alt="Cacao bag"
+          >
+            <img
+              class="detail-img bag-image"
+              src="assets/cacao.jpg"
+              alt="Cacao bag"
+            />
+          </div>
+          <div class="bag-specs">
+            <div class="spec-row">
+              <span class="spec-label">Material</span
+              ><span class="spec-val">100% cotton ribbon yarn</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Stitch</span
+              ><span class="spec-val">Bobble, left dense and irregular</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Silhouette</span
+              ><span class="spec-val">Rounded hobo</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Handle</span
+              ><span class="spec-val">Single wide shoulder handle</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Hardware</span
+              ><span class="spec-val">Engraved brass plaque</span>
+            </div>
+          </div>
+          <a href="#connect" class="request-link">
+            <span class="request-link-underline">Request Cacao</span>
+            <svg
+              width="34"
+              height="10"
+              viewBox="0 0 34 10"
+              fill="none"
+              class="request-arrow"
+            >
+              <line x1="0" y1="5" x2="32" y2="5" />
+              <path d="M27 1 L32 5 L27 9" />
+            </svg>
+          </a>
+        </div>
+      </section>
+
+      <!-- BAG Nº 02 — FORÊT -->
+      <section id="foret" class="bag-section">
+        <div data-reveal="1" class="bag-inner">
+          <div class="bag-kicker">Piece Nº 02</div>
+          <h2 class="bag-title">Forêt</h2>
+          <p class="bag-desc">
+            Two yarns worked together, so the color shifts as the bag moves. The
+            most textural piece in the collection and the one that reads as
+            handmade from across a room.
+          </p>
+          <div
+            class="lightbox-trigger bag-image-wrap"
+            data-src="assets/foret.jpg"
+            data-alt="Forêt bag"
+          >
+            <img
+              class="detail-img bag-image"
+              src="assets/foret.jpg"
+              alt="Forêt bag"
+            />
+          </div>
+          <div class="bag-specs">
+            <div class="spec-row">
+              <span class="spec-label">Material</span
+              ><span class="spec-val"
+                >Two cotton ribbon yarns, worked together</span
+              >
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Stitch</span
+              ><span class="spec-val">Two-tone bobble</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Color</span
+              ><span class="spec-val">Forest green and cream</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Hardware</span
+              ><span class="spec-val">Engraved brass plaque</span>
+            </div>
+          </div>
+          <a href="#connect" class="request-link">
+            <span class="request-link-underline">Request Forêt</span>
+            <svg
+              width="34"
+              height="10"
+              viewBox="0 0 34 10"
+              fill="none"
+              class="request-arrow"
+            >
+              <line x1="0" y1="5" x2="32" y2="5" />
+              <path d="M27 1 L32 5 L27 9" />
+            </svg>
+          </a>
+        </div>
+      </section>
+
+      <!-- BAG Nº 03 — RUBIS -->
+      <section id="rubis" class="bag-section">
+        <div data-reveal="1" class="bag-inner">
+          <div class="bag-kicker bag-kicker--light">Piece Nº 03</div>
+          <h2 class="bag-title">Rubis</h2>
+          <p class="bag-desc bag-desc--rubis">
+            A soft shoulder bag with a double strap and pearls set into the
+            stitch by hand, one at a time, in no fixed pattern.
+          </p>
+          <div
+            class="lightbox-trigger bag-image-wrap"
+            data-src="assets/rubis.jpg"
+            data-alt="Rubis bag"
+          >
+            <img
+              class="detail-img bag-image bag-image--rubis"
+              src="assets/rubis.jpg"
+              alt="Rubis bag"
+            />
+          </div>
+          <div class="bag-specs bag-specs--rubis">
+            <div class="spec-row spec-row--light">
+              <span class="spec-label spec-label--light">Material</span
+              ><span class="spec-val">100% cotton ribbon yarn</span>
+            </div>
+            <div class="spec-row spec-row--light">
+              <span class="spec-label spec-label--light">Stitch</span
+              ><span class="spec-val">Single crochet with pearls set in</span>
+            </div>
+            <div class="spec-row spec-row--light">
+              <span class="spec-label spec-label--light">Detailing</span
+              ><span class="spec-val"
+                >Freshwater-look pearls, placed by hand</span
+              >
+            </div>
+            <div class="spec-row spec-row--light">
+              <span class="spec-label spec-label--light">Handle</span
+              ><span class="spec-val">Double shoulder strap</span>
+            </div>
+            <div class="spec-row spec-row--light">
+              <span class="spec-label spec-label--light">Hardware</span
+              ><span class="spec-val">Engraved brass plaque</span>
+            </div>
+          </div>
+          <a href="#connect" class="request-link request-link--rubis">
+            <span class="request-link-underline request-link-underline--rubis"
+              >Request Rubis</span
+            >
+            <svg
+              width="34"
+              height="10"
+              viewBox="0 0 34 10"
+              fill="none"
+              class="request-arrow request-arrow--cream"
+            >
+              <line x1="0" y1="5" x2="32" y2="5" />
+              <path d="M27 1 L32 5 L27 9" />
+            </svg>
+          </a>
+        </div>
+      </section>
+
+      <!-- BAG Nº 04 — NUAGE -->
+      <section id="nuage" class="bag-section">
+        <div data-reveal="1" class="bag-inner">
+          <div class="bag-kicker bag-kicker--dark">Piece Nº 04</div>
+          <h2 class="bag-title">Nuage</h2>
+          <p class="bag-desc bag-desc--nuage">
+            The quietest piece. A structured pillow clutch with a slot handle
+            and an even, tight stitch. Made for evenings when the bag should not
+            be the loudest thing in the room.
+          </p>
+          <div
+            class="lightbox-trigger bag-image-wrap"
+            data-src="assets/nuage.jpg"
+            data-alt="Nuage clutch"
+          >
+            <img
+              class="detail-img bag-image bag-image--nuage"
+              src="assets/nuage.jpg"
+              alt="Nuage clutch"
+            />
+          </div>
+          <div class="bag-specs bag-specs--nuage">
+            <div class="spec-row spec-row--dark">
+              <span class="spec-label spec-label--dark">Material</span
+              ><span class="spec-val spec-val--dark"
+                >100% cotton ribbon yarn</span
+              >
+            </div>
+            <div class="spec-row spec-row--dark">
+              <span class="spec-label spec-label--dark">Stitch</span
+              ><span class="spec-val spec-val--dark"
+                >Even, tight single crochet</span
+              >
+            </div>
+            <div class="spec-row spec-row--dark">
+              <span class="spec-label spec-label--dark">Silhouette</span
+              ><span class="spec-val spec-val--dark"
+                >Structured pillow clutch</span
+              >
+            </div>
+            <div class="spec-row spec-row--dark">
+              <span class="spec-label spec-label--dark">Handle</span
+              ><span class="spec-val spec-val--dark">Integrated slot</span>
+            </div>
+            <div class="spec-row spec-row--dark">
+              <span class="spec-label spec-label--dark">Hardware</span
+              ><span class="spec-val spec-val--dark"
+                >Engraved brass plaque</span
+              >
+            </div>
+          </div>
+          <a href="#connect" class="request-link request-link--nuage">
+            <span class="request-link-underline request-link-underline--nuage"
+              >Request Nuage</span
+            >
+            <svg
+              width="34"
+              height="10"
+              viewBox="0 0 34 10"
+              fill="none"
+              class="request-arrow request-arrow--ink"
+            >
+              <line x1="0" y1="5" x2="32" y2="5" />
+              <path d="M27 1 L32 5 L27 9" />
+            </svg>
+          </a>
+        </div>
+      </section>
+
+      <!-- BAG Nº 05 — MARÉE -->
+      <section id="maree" class="bag-section">
+        <div data-reveal="1" class="bag-inner">
+          <div class="bag-kicker">Piece Nº 05</div>
+          <h2 class="bag-title">Marée</h2>
+          <p class="bag-desc">
+            The most worked piece we make. Roughly forty charms and pearls, each
+            one attached individually into the stitch.
+          </p>
+          <div
+            class="lightbox-trigger bag-image-wrap"
+            data-src="assets/maree.jpg"
+            data-alt="Marée bag"
+          >
+            <img
+              class="detail-img bag-image"
+              src="assets/maree.jpg"
+              alt="Marée bag"
+            />
+          </div>
+          <div class="bag-specs">
+            <div class="spec-row">
+              <span class="spec-label">Material</span
+              ><span class="spec-val">100% cotton ribbon yarn</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Stitch</span
+              ><span class="spec-val"
+                >Dense single crochet, structured body</span
+              >
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Dimensions</span
+              ><span class="spec-val">34 × 26 × 11 cm</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Handle</span
+              ><span class="spec-val">Integrated cut-out</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Detailing</span
+              ><span class="spec-val">Gold-tone charms, glass pearls</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Hardware</span
+              ><span class="spec-val">Engraved brass plaque</span>
+            </div>
+          </div>
+          <a href="#connect" class="request-link">
+            <span class="request-link-underline">Request Marée</span>
+            <svg
+              width="34"
+              height="10"
+              viewBox="0 0 34 10"
+              fill="none"
+              class="request-arrow"
+            >
+              <line x1="0" y1="5" x2="32" y2="5" />
+              <path d="M27 1 L32 5 L27 9" />
+            </svg>
+          </a>
+        </div>
+      </section>
+
+      <!-- MADE BY HAND -->
+      <section id="made">
+        <div data-reveal="1" class="made-inner">
+          <div class="eyebrow eyebrow--flush">Made by hand</div>
+          <h2 class="made-title">Every stitch by hand, one at a time.</h2>
+          <p class="made-desc">
+            Worked with a hook, never a machine. The texture is the record of
+            the making.
+          </p>
+        </div>
+
+        <div data-reveal="1" class="made-grid">
+          <div>
+            <div class="hand-photo hand-photo--01"></div>
+            <div class="made-step-head">
+              <span class="made-step-num">01</span>
+              <span class="made-step-label">The Yarn</span>
+            </div>
+            <p class="made-step-desc">
+              Cotton ribbon, soft in the hand and heavy enough to hold a shape
+              without lining or stiffener. Chosen for how it behaves after a
+              year of use, not how it looks on day one.
+            </p>
+          </div>
+          <div>
+            <div class="hand-photo hand-photo--02"></div>
+            <div class="made-step-head">
+              <span class="made-step-num">02</span>
+              <span class="made-step-label">The Stitch</span>
+            </div>
+            <p class="made-step-desc">
+              Worked entirely by hand with a hook. The bobble stitch eats yarn,
+              which is why the surface has depth that machine work cannot reach.
+            </p>
+          </div>
+          <div>
+            <div class="hand-photo hand-photo--03"></div>
+            <div class="made-step-head">
+              <span class="made-step-num">03</span>
+              <span class="made-step-label">The Finish</span>
+            </div>
+            <p class="made-step-desc">
+              The top edge is braided closed, the ends are worked back into the
+              body, and the brass plaque is set last. Nothing is glued.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONNECT -->
+      <section id="connect">
+        <div data-reveal="1" class="connect-inner">
+          <div class="eyebrow eyebrow--flush">Request</div>
+          <h2 class="connect-title">Request your bag</h2>
+          <p class="connect-desc">
+            Tell us which piece and which color. Message us on Instagram to
+            order.
+          </p>
+          <a
+            href="https://instagram.com/nite.bags"
+            target="_blank"
+            rel="noopener"
+            class="instagram-link"
+          >
+            <span class="instagram-underline">Message us on Instagram</span>
+            <svg
+              width="38"
+              height="11"
+              viewBox="0 0 38 11"
+              fill="none"
+              class="instagram-arrow"
+            >
+              <line x1="0" y1="5.5" x2="35" y2="5.5" />
+              <path d="M30 1 L35 5.5 L30 10" />
+            </svg>
+          </a>
+          <div class="connect-handle">@nite.bags</div>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer id="contact">
+        <div class="footer-inner">
+          <svg viewBox="0 0 400 400" fill="none" class="footer-logo">
+            <circle
+              cx="200"
+              cy="200"
+              r="188"
+              stroke="var(--brass)"
+              stroke-width="2.6"
+            />
+            <text
+              x="200"
+              y="250"
+              text-anchor="middle"
+              font-family="'Bodoni Moda',Georgia,serif"
+              font-size="116"
+              font-weight="500"
+              letter-spacing="10"
+              fill="var(--brass)"
+            >
+              NITÉ
+            </text>
+            <line
+              x1="88"
+              y1="283"
+              x2="184"
+              y2="283"
+              stroke="var(--brass)"
+              stroke-width="2.6"
+            />
+            <line
+              x1="216"
+              y1="283"
+              x2="312"
+              y2="283"
+              stroke="var(--brass)"
+              stroke-width="2.6"
+            />
+            <circle cx="200" cy="283" r="6.5" fill="var(--brass)" />
+            <text
+              x="200"
+              y="316"
+              text-anchor="middle"
+              textLength="215"
+              lengthAdjust="spacing"
+              font-family="'Inter',sans-serif"
+              font-size="17"
+              font-weight="500"
+              fill="var(--brass)"
+            >
+              HANDCRAFTED BAGS
+            </text>
+          </svg>
+
+          <div class="footer-grid">
+            <div>
+              <div class="footer-col-title">Collection</div>
+              <div class="footer-col-links">
+                <a href="#cacao" class="footer-link">Cacao</a>
+                <a href="#foret" class="footer-link">Forêt</a>
+                <a href="#rubis" class="footer-link">Rubis</a>
+                <a href="#nuage" class="footer-link">Nuage</a>
+                <a href="#maree" class="footer-link">Marée</a>
+              </div>
+            </div>
+            <div>
+              <div class="footer-col-title">About</div>
+              <div class="footer-col-links">
+                <a href="#made" class="footer-link">Made by hand</a>
+                <a href="#manifesto" class="footer-link">The name</a>
+              </div>
+            </div>
+            <div>
+              <div class="footer-col-title">Contact</div>
+              <div class="footer-col-links">
+                <a
+                  href="https://instagram.com/nite.bags"
+                  target="_blank"
+                  rel="noopener"
+                  class="footer-link"
+                  >Instagram</a
+                >
+                <a
+                  href="https://wa.me/381600000000"
+                  target="_blank"
+                  rel="noopener"
+                  class="footer-link"
+                  >WhatsApp</a
+                >
+                <a href="mailto:hello@nite.rs" class="footer-link">Email</a>
+              </div>
+            </div>
+          </div>
+
+          <p class="footer-note">
+            Spot clean only. Store filled, not folded.
+          </p>
+
+          <div class="footer-bottom">
+            <span class="footer-copy"
+              >NITÉ, Belgrade. Every bag made by hand. © 2026</span
+            >
+            <span class="footer-made"
+              >Made to order · One thread at a time</span
+            >
+          </div>
+        </div>
+      </footer>
+
+      <!-- LIGHTBOX -->
+      <div id="lightbox" class="lightbox" hidden>
+        <img id="lightboxImg" alt="" class="lightbox-img" />
+        <button id="lightboxClose" aria-label="Close" class="lightbox-close">
+          ×
+        </button>
+      </div>
+    </div>
+    <script src="js/script.js"></script>
+  </body>
+</html>
