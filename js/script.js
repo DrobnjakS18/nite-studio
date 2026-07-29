@@ -1,17 +1,112 @@
 (() => {
   const SLIDE_SECONDS = 5;
-  const count = 5;
+  const count = BAGS.length;
   let slide = 0;
   let timer = null;
   let lightboxOpen = false;
 
+  function bagAlt(bag) {
+    return `${bag.name} ${bag.altNoun}`;
+  }
+
+  function renderSlider() {
+    const track = document.getElementById('sliderTrack');
+    track.innerHTML = BAGS.map((bag, i) => `
+      <a href="#${bag.id}" data-slide="${i}" class="slide">
+        <img src="${bag.images[0]}" alt="${bagAlt(bag)}" class="slide-img${bag.variant ? ` slide-img--${bag.variant}` : ''}" />
+        <span class="slide-caption">${bag.name}</span>
+      </a>
+    `).join('');
+  }
+
+  function renderThumbs() {
+    const wrap = document.querySelector('.collection-thumbs');
+    wrap.innerHTML = BAGS.map((bag, i) => `
+      <button class="collection-thumb${i === 0 ? ' active' : ''}" data-thumb="${i}">
+        <div class="collection-img-wrap">
+          <img class="collection-img collection-item-img${bag.variant === 'rubis' ? ' collection-item-img--rubis' : ''}" src="${bag.images[0]}" alt="${bagAlt(bag)}" />
+        </div>
+        <div class="collection-item-name">${bag.name}</div>
+        <div class="collection-item-num">Piece Nº ${bag.num}</div>
+      </button>
+    `).join('');
+  }
+
+  function renderBagSections() {
+    BAGS.forEach((bag) => {
+      const inner = document.querySelector(`#${bag.id} .bag-inner`);
+      if (!inner) return;
+      const alt = bagAlt(bag);
+      const kickerMod = bag.variant === 'rubis' ? ' bag-kicker--light' : bag.variant === 'nuage' ? ' bag-kicker--dark' : '';
+      const descMod = bag.variant ? ` bag-desc--${bag.variant}` : '';
+      const imgMod = bag.variant ? ` bag-image--${bag.variant}` : '';
+      const specsMod = bag.variant ? ` bag-specs--${bag.variant}` : '';
+      const rowMod = bag.variant === 'rubis' ? ' spec-row--light' : bag.variant === 'nuage' ? ' spec-row--dark' : '';
+      const labelMod = bag.variant === 'rubis' ? ' spec-label--light' : bag.variant === 'nuage' ? ' spec-label--dark' : '';
+      const valMod = bag.variant === 'nuage' ? ' spec-val--dark' : '';
+      const linkMod = bag.variant ? ` request-link--${bag.variant}` : '';
+      const underlineMod = bag.variant ? ` request-link-underline--${bag.variant}` : '';
+      const arrowMod = bag.variant === 'rubis' ? ' request-arrow--cream' : bag.variant === 'nuage' ? ' request-arrow--ink' : '';
+
+      const galleryHtml = bag.images.length > 1 ? `
+        <div class="bag-gallery">
+          ${bag.images.map((src, i) => `
+            <button class="bag-gallery-thumb${i === 0 ? ' active' : ''}" data-img="${i}">
+              <img src="${src}" alt="" />
+            </button>
+          `).join('')}
+        </div>
+      ` : '';
+
+      // ${galleryHtml} - insert below class="lightbox-trigger
+      inner.innerHTML = `
+        <div class="bag-kicker${kickerMod}">Piece Nº ${bag.num}</div>
+        <h2 class="bag-title">${bag.name}</h2>
+        <p class="bag-desc${descMod}">${bag.desc}</p>
+        <div class="lightbox-trigger bag-image-wrap" data-src="${bag.images[0]}" data-alt="${alt}">
+          <img class="detail-img bag-image${imgMod}" src="${bag.images[0]}" alt="${alt}" />
+        </div>
+        <div class="bag-specs${specsMod}">
+          ${bag.specs.map(([label, val]) => `
+            <div class="spec-row${rowMod}">
+              <span class="spec-label${labelMod}">${label}</span><span class="spec-val${valMod}">${val}</span>
+            </div>
+          `).join('')}
+        </div>
+        <a href="#connect" class="request-link${linkMod}">
+          <span class="request-link-underline${underlineMod}">Request ${bag.name}</span>
+          <svg width="34" height="10" viewBox="0 0 34 10" fill="none" class="request-arrow${arrowMod}">
+            <line x1="0" y1="5" x2="32" y2="5" />
+            <path d="M27 1 L32 5 L27 9" />
+          </svg>
+        </a>
+      `;
+
+      const mainImg = inner.querySelector('.detail-img');
+      const trigger = inner.querySelector('.lightbox-trigger');
+      const galleryThumbs = Array.from(inner.querySelectorAll('.bag-gallery-thumb'));
+      galleryThumbs.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.img, 10) || 0;
+          const src = bag.images[idx];
+          mainImg.src = src;
+          trigger.dataset.src = src;
+          galleryThumbs.forEach((b, i) => b.classList.toggle('active', i === idx));
+        });
+      });
+    });
+  }
+
+  renderSlider();
+  renderThumbs();
+  renderBagSections();
+
   const track = document.getElementById('sliderTrack');
-  const dotsWrap = document.getElementById('sliderDots');
-  const dots = Array.from(dotsWrap.children);
+  const thumbs = Array.from(document.querySelectorAll('.collection-thumb'));
 
   function paintSlider() {
     track.style.transform = `translateX(-${slide * 100}%)`;
-    dots.forEach((d, i) => d.classList.toggle('active', i === slide));
+    thumbs.forEach((t, i) => t.classList.toggle('active', i === slide));
   }
 
   function goTo(n) {
@@ -30,7 +125,7 @@
 
   document.getElementById('prevBtn').addEventListener('click', () => { goTo(slide - 1); startAuto(); });
   document.getElementById('nextBtn').addEventListener('click', () => { goTo(slide + 1); startAuto(); });
-  dots.forEach((d) => d.addEventListener('click', () => { goTo(parseInt(d.dataset.dot, 10) || 0); startAuto(); }));
+  thumbs.forEach((t) => t.addEventListener('click', () => { goTo(parseInt(t.dataset.thumb, 10) || 0); startAuto(); }));
 
   paintSlider();
   startAuto();
