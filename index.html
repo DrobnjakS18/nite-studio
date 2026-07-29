@@ -3,11 +3,86 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>NITÉ — Handcrafted Bags</title>
+    <title>NITÉ — Handcrafted Crochet Bags, Belgrade</title>
+    <meta
+      name="description"
+      content="Hand-crocheted bags made to order in Belgrade. Five pieces, any color, no two alike: Cacao, Forêt, Rubis, Nuage, Marée."
+    />
+    <link rel="canonical" href="https://nitestudio.rs/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="NITÉ" />
+    <meta property="og:url" content="https://nitestudio.rs/" />
+    <meta property="og:title" content="NITÉ — Handcrafted Crochet Bags, Belgrade" />
+    <meta
+      property="og:description"
+      content="Hand-crocheted bags made to order in Belgrade. Five pieces, any color, no two alike."
+    />
+    <meta property="og:image" content="https://nitestudio.rs/assets/cacao.jpg" />
+    <meta property="og:image:width" content="1536" />
+    <meta property="og:image:height" content="2048" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NITÉ — Handcrafted Crochet Bags, Belgrade" />
+    <meta
+      name="twitter:description"
+      content="Hand-crocheted bags made to order in Belgrade. Five pieces, any color, no two alike."
+    />
+    <meta name="twitter:image" content="https://nitestudio.rs/assets/cacao.jpg" />
     <link rel="stylesheet" href="css/fonts.css?v=0.1" />
-    <link rel="stylesheet" href="css/style.css?v=0.2" />
-    <script src="js/bags-data.js?v=0.1" defer></script>
-    <script src="js/script.js?v=0.1" defer></script>
+    <link rel="stylesheet" href="css/style.css?v=0.3" />
+    <script src="js/bags-data.js?v=0.2" defer></script>
+    <script src="js/script.js?v=0.2" defer></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "NITÉ",
+        "url": "https://nitestudio.rs/",
+        "description": "Hand-crocheted bags made to order in Belgrade.",
+        "sameAs": ["https://instagram.com/nite.bags"]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Product",
+            "name": "Cacao",
+            "description": "A rounded hobo with a single wide handle that sits close to the shoulder. The stitch is left dense and irregular so the surface catches light differently from every angle.",
+            "image": "https://nitestudio.rs/assets/cacao.jpg",
+            "brand": { "@type": "Brand", "name": "NITÉ" }
+          },
+          {
+            "@type": "Product",
+            "name": "Forêt",
+            "description": "Two yarns worked together, so the color shifts as the bag moves. The most textural piece in the collection and the one that reads as handmade from across a room.",
+            "image": "https://nitestudio.rs/assets/foret.jpg",
+            "brand": { "@type": "Brand", "name": "NITÉ" }
+          },
+          {
+            "@type": "Product",
+            "name": "Rubis",
+            "description": "A soft shoulder bag with a double strap and pearls set into the stitch by hand, one at a time, in no fixed pattern.",
+            "image": "https://nitestudio.rs/assets/rubis.jpg",
+            "brand": { "@type": "Brand", "name": "NITÉ" }
+          },
+          {
+            "@type": "Product",
+            "name": "Nuage",
+            "description": "The quietest piece. A structured pillow clutch with a slot handle and an even, tight stitch. Made for evenings when the bag should not be the loudest thing in the room.",
+            "image": "https://nitestudio.rs/assets/nuage.jpg",
+            "brand": { "@type": "Brand", "name": "NITÉ" }
+          },
+          {
+            "@type": "Product",
+            "name": "Marée",
+            "description": "The most worked piece we make. Roughly forty charms and pearls, each one attached individually into the stitch.",
+            "image": "https://nitestudio.rs/assets/maree.jpg",
+            "brand": { "@type": "Brand", "name": "NITÉ" }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div class="page">
@@ -56,6 +131,9 @@
       <!-- SECTION 1 — HERO -->
       <section id="hero">
         <div class="hero-inner">
+          <h1 class="visually-hidden">
+            NITÉ — Handcrafted Crochet Bags, Made to Order in Belgrade
+          </h1>
           <svg viewBox="0 0 400 400" fill="none" class="hero-logo">
             <circle
               cx="200"
@@ -118,6 +196,13 @@
           <p class="hero-sub">
             Made to order in Belgrade. Choose your color.
           </p>
+          <a href="#collection" class="request-link request-link--nuage">
+            <span class="request-link-underline request-link-underline--nuage">See the Collection</span>
+            <svg width="34" height="10" viewBox="0 0 34 10" fill="none" class="request-arrow request-arrow--ink">
+              <line x1="0" y1="5" x2="32" y2="5" />
+              <path d="M27 1 L32 5 L27 9" />
+            </svg>
+          </a>
           <div class="stitch-divider" aria-hidden="true">
             <svg viewBox="0 0 240 16" fill="none" class="stitch-svg">
               <circle cx="4" cy="8" r="3.2" fill="var(--brass)" />
@@ -202,7 +287,7 @@
           <!-- THUMBNAIL RAIL -->
           <div class="collection-thumbs"></div>
           <div class="slider-hint">
-            Select a piece to see it in full
+            See every angle
           </div>
         </div>
       </section>
@@ -238,8 +323,8 @@
           <div class="eyebrow eyebrow--flush">Made by hand</div>
           <h2 class="made-title">Every stitch by hand, one at a time.</h2>
           <p class="made-desc">
-            Worked with a hook, never a machine. The texture is the record of
-            the making.
+            Worked with a hook, never a machine — the hand labor a factory
+            line skips entirely. The texture is the record of the making.
           </p>
         </div>
 

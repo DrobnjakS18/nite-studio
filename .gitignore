@@ -4,3 +4,10 @@ Thumbs.db
 .vscode/
 .idea/
 CLAUDE.md
+node_modules/
+.env
+.env.*
+npm-debug.log*
+*.swp
+*.swo
+*~

@@ -5,6 +5,8 @@ const BAGS = [
     name: 'Cacao',
     altNoun: 'bag',
     variant: null,
+    imgW: 1536,
+    imgH: 2048,
     images: ['assets/cacao.jpg', 'assets/cacao.jpg', 'assets/cacao.jpg'],
     desc: 'A rounded hobo with a single wide handle that sits close to the shoulder. The stitch is left dense and irregular so the surface catches light differently from every angle.',
     specs: [
@@ -21,6 +23,8 @@ const BAGS = [
     name: 'Forêt',
     altNoun: 'bag',
     variant: null,
+    imgW: 1536,
+    imgH: 2048,
     images: ['assets/foret.jpg', 'assets/foret.jpg', 'assets/foret.jpg'],
     desc: 'Two yarns worked together, so the color shifts as the bag moves. The most textural piece in the collection and the one that reads as handmade from across a room.',
     specs: [
@@ -36,6 +40,8 @@ const BAGS = [
     name: 'Rubis',
     altNoun: 'bag',
     variant: 'rubis',
+    imgW: 1536,
+    imgH: 2048,
     images: ['assets/rubis.jpg', 'assets/rubis.jpg', 'assets/rubis.jpg'],
     desc: 'A soft shoulder bag with a double strap and pearls set into the stitch by hand, one at a time, in no fixed pattern.',
     specs: [
@@ -52,6 +58,8 @@ const BAGS = [
     name: 'Nuage',
     altNoun: 'clutch',
     variant: 'nuage',
+    imgW: 2048,
+    imgH: 1536,
     images: ['assets/nuage.jpg', 'assets/nuage.jpg', 'assets/nuage.jpg'],
     desc: 'The quietest piece. A structured pillow clutch with a slot handle and an even, tight stitch. Made for evenings when the bag should not be the loudest thing in the room.',
     specs: [
@@ -68,6 +76,8 @@ const BAGS = [
     name: 'Marée',
     altNoun: 'bag',
     variant: null,
+    imgW: 1536,
+    imgH: 2048,
     images: ['assets/maree.jpg', 'assets/maree.jpg', 'assets/maree.jpg'],
     desc: 'The most worked piece we make. Roughly forty charms and pearls, each one attached individually into the stitch.',
     specs: [

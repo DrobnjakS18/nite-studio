@@ -23,9 +23,10 @@
 
   function slideHtml(bag, i, isClone) {
     const cloneAttrs = isClone ? ' aria-hidden="true" tabindex="-1"' : '';
+    const loading = i === 0 && !isClone ? 'eager' : 'lazy';
     return `
       <a href="#${bag.id}" data-slide="${i}" class="slide"${cloneAttrs}>
-        <img src="${bag.images[0]}" alt="${bagAlt(bag)}" class="slide-img${bag.variant ? ` slide-img--${bag.variant}` : ''}" />
+        <img src="${bag.images[0]}" alt="${bagAlt(bag)}" width="${bag.imgW}" height="${bag.imgH}" loading="${loading}" class="slide-img${bag.variant ? ` slide-img--${bag.variant}` : ''}" />
         <span class="slide-caption">${bag.name}</span>
       </a>
     `;
@@ -46,7 +47,7 @@
     wrap.innerHTML = BAGS.map((bag, i) => `
       <button class="collection-thumb${i === 0 ? ' active' : ''}" data-thumb="${i}">
         <div class="collection-img-wrap">
-          <img class="collection-img collection-item-img${bag.variant === 'rubis' ? ' collection-item-img--rubis' : ''}" src="${bag.images[0]}" alt="${bagAlt(bag)}" />
+          <img class="collection-img collection-item-img${bag.variant === 'rubis' ? ' collection-item-img--rubis' : ''}" src="${bag.images[0]}" alt="${bagAlt(bag)}" width="${bag.imgW}" height="${bag.imgH}" loading="lazy" />
         </div>
         <div class="collection-item-name">${bag.name}</div>
         <div class="collection-item-num">Piece Nº ${bag.num}</div>
@@ -74,7 +75,7 @@
         <div class="bag-gallery">
           ${bag.images.map((src, i) => `
             <button class="bag-gallery-thumb${i === 0 ? ' active' : ''}" data-img="${i}">
-              <img src="${src}" alt="" />
+              <img src="${src}" alt="" width="${bag.imgW}" height="${bag.imgH}" loading="lazy" />
             </button>
           `).join('')}
         </div>
@@ -86,7 +87,7 @@
         <h2 class="bag-title">${bag.name}</h2>
         <p class="bag-desc${descMod}">${bag.desc}</p>
         <div class="lightbox-trigger bag-image-wrap" data-src="${bag.images[0]}" data-alt="${alt}">
-          <img class="detail-img bag-image${imgMod}" src="${bag.images[0]}" alt="${alt}" />
+          <img class="detail-img bag-image${imgMod}" src="${bag.images[0]}" alt="${alt}" width="${bag.imgW}" height="${bag.imgH}" loading="lazy" />
         </div>
         <div class="bag-specs${specsMod}">
           ${bag.specs.map(([label, val]) => `
