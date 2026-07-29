@@ -138,8 +138,7 @@
     const logical = ((pos - 1) % count + count) % count;
     thumbs.forEach((t, i) => t.classList.toggle('active', i === logical));
     if (!withTransition) {
-      track.getBoundingClientRect();
-      track.style.transition = '';
+      requestAnimationFrame(() => { track.style.transition = ''; });
     }
   }
 
@@ -246,8 +245,6 @@
     document.querySelectorAll('[data-reveal]').forEach((el) => {
       if (seen.has(el)) return;
       seen.add(el);
-      const already = el.getBoundingClientRect().top < window.innerHeight * 0.9;
-      if (already) { el.classList.add('revealed'); return; }
       if (io) io.observe(el);
       else el.classList.add('revealed');
     });
