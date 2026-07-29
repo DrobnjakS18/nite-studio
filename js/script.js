@@ -9,6 +9,19 @@
     return `${bag.name} ${bag.altNoun}`;
   }
 
+  function renderNav() {
+    const collectionLink = document.querySelector('#navLinks a[href="#collection"]');
+    if (!collectionLink) return;
+    const bagLinksHtml = BAGS.map((bag) => `<a href="#${bag.id}" class="close-menu nav-link">${bag.name}</a>`).join('');
+    collectionLink.insertAdjacentHTML('afterend', bagLinksHtml);
+  }
+
+  function renderFooterLinks() {
+    const wrap = document.getElementById('footerCollectionLinks');
+    if (!wrap) return;
+    wrap.innerHTML = BAGS.map((bag) => `<a href="#${bag.id}" class="footer-link">${bag.name}</a>`).join('');
+  }
+
   function renderSlider() {
     const track = document.getElementById('sliderTrack');
     track.innerHTML = BAGS.map((bag, i) => `
@@ -97,6 +110,8 @@
     });
   }
 
+  renderNav();
+  renderFooterLinks();
   renderSlider();
   renderThumbs();
   renderBagSections();
