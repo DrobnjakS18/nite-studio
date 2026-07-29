@@ -1,7 +1,6 @@
 (() => {
   const SLIDE_SECONDS = 5;
   const count = BAGS.length;
-  let slide = 0;
   let timer = null;
   let lightboxOpen = false;
 
@@ -22,14 +21,24 @@
     wrap.innerHTML = BAGS.map((bag) => `<a href="#${bag.id}" class="footer-link">${bag.name}</a>`).join('');
   }
 
-  function renderSlider() {
-    const track = document.getElementById('sliderTrack');
-    track.innerHTML = BAGS.map((bag, i) => `
-      <a href="#${bag.id}" data-slide="${i}" class="slide">
+  function slideHtml(bag, i, isClone) {
+    const cloneAttrs = isClone ? ' aria-hidden="true" tabindex="-1"' : '';
+    return `
+      <a href="#${bag.id}" data-slide="${i}" class="slide"${cloneAttrs}>
         <img src="${bag.images[0]}" alt="${bagAlt(bag)}" class="slide-img${bag.variant ? ` slide-img--${bag.variant}` : ''}" />
         <span class="slide-caption">${bag.name}</span>
       </a>
-    `).join('');
+    `;
+  }
+
+  function renderSlider() {
+    const track = document.getElementById('sliderTrack');
+    const first = BAGS[0];
+    const last = BAGS[BAGS.length - 1];
+    track.innerHTML =
+      slideHtml(last, BAGS.length - 1, true) +
+      BAGS.map((bag, i) => slideHtml(bag, i, false)).join('') +
+      slideHtml(first, 0, true);
   }
 
   function renderThumbs() {
@@ -119,30 +128,66 @@
   const track = document.getElementById('sliderTrack');
   const thumbs = Array.from(document.querySelectorAll('.collection-thumb'));
 
-  function paintSlider() {
-    track.style.transform = `translateX(-${slide * 100}%)`;
-    thumbs.forEach((t, i) => t.classList.toggle('active', i === slide));
+  // Real slides sit at pos 1..count; pos 0 and count+1 are the cloned
+  // last/first slides that make the loop feel infinite.
+  let pos = 1;
+
+  function paintSlider(withTransition) {
+    track.style.transition = withTransition ? '' : 'none';
+    track.style.transform = `translateX(-${pos * 100}%)`;
+    const logical = ((pos - 1) % count + count) % count;
+    thumbs.forEach((t, i) => t.classList.toggle('active', i === logical));
+    if (!withTransition) {
+      track.getBoundingClientRect();
+      track.style.transition = '';
+    }
   }
 
-  function goTo(n) {
-    slide = ((n % count) + count) % count;
-    paintSlider();
+  // Matches the .slider-track transition duration in style.css, plus a
+  // small margin. While an animated move is in flight, arrow/thumb clicks
+  // are ignored so rapid clicking can't queue up moves faster than the
+  // slider can visually keep up with.
+  const ANIM_MS = 900;
+  let animating = false;
+  let animLockTimer = null;
+
+  function goToPos(n, withTransition = true) {
+    pos = n;
+    paintSlider(withTransition);
+    if (withTransition) {
+      animating = true;
+      clearTimeout(animLockTimer);
+      animLockTimer = setTimeout(() => { animating = false; }, ANIM_MS);
+    }
   }
+
+  // If we're resting on a cloned slide (0 or count+1), snap instantly to
+  // the matching real slide before moving further — the clone and the
+  // real slide look identical, so the jump is invisible, and it means
+  // `pos` never drifts past the clones no matter how fast someone clicks.
+  function settleIfNeeded() {
+    if (pos === 0) goToPos(count, false);
+    else if (pos === count + 1) goToPos(1, false);
+  }
+
+  function next() { settleIfNeeded(); goToPos(pos + 1); }
+  function prev() { settleIfNeeded(); goToPos(pos - 1); }
+  function goToIndex(i) { settleIfNeeded(); goToPos(((i % count) + count) % count + 1); }
 
   function startAuto() {
     stopAuto();
     timer = setInterval(() => {
       if (lightboxOpen) return;
-      goTo(slide + 1);
+      next();
     }, SLIDE_SECONDS * 1000);
   }
   function stopAuto() { if (timer) clearInterval(timer); timer = null; }
 
-  document.getElementById('prevBtn').addEventListener('click', () => { goTo(slide - 1); startAuto(); });
-  document.getElementById('nextBtn').addEventListener('click', () => { goTo(slide + 1); startAuto(); });
-  thumbs.forEach((t) => t.addEventListener('click', () => { goTo(parseInt(t.dataset.thumb, 10) || 0); startAuto(); }));
+  document.getElementById('prevBtn').addEventListener('click', () => { if (animating) return; prev(); startAuto(); });
+  document.getElementById('nextBtn').addEventListener('click', () => { if (animating) return; next(); startAuto(); });
+  thumbs.forEach((t) => t.addEventListener('click', () => { if (animating) return; goToIndex(parseInt(t.dataset.thumb, 10) || 0); startAuto(); }));
 
-  paintSlider();
+  paintSlider(false);
   startAuto();
 
   // Mobile nav

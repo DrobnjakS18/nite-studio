@@ -252,7 +252,7 @@ a:hover {
   position: relative;
   overflow: hidden;
   border-radius: var(--img-radius);
-  height: clamp(260px, 32vw, 420px);
+  height: clamp(360px, 46vw, 620px);
 }
 .slider-track {
   display: flex;
@@ -430,6 +430,24 @@ a:hover {
   border-radius: var(--img-radius);
   border: 1px solid transparent;
   transition: border-color 0.3s;
+}
+
+@media (max-width: 760px) {
+  .collection-thumbs {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding: 0 4px 6px;
+    margin-left: -4px;
+    margin-right: -4px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .collection-thumb {
+    flex: 0 0 auto;
+    width: 92px;
+    scroll-snap-align: center;
+  }
 }
 .collection-thumb.active .collection-img-wrap {
   border-color: var(--brass);
