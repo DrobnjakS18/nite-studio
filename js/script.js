@@ -75,7 +75,7 @@
         <div class="bag-gallery">
           ${bag.images.map((src, i) => `
             <button class="bag-gallery-thumb${i === 0 ? ' active' : ''}" data-img="${i}">
-              <img src="${src}" alt="" width="${bag.imgW}" height="${bag.imgH}" loading="lazy" />
+              <img src="${src}" alt="${bagAlt(bag)}, view ${i + 1}" width="${bag.imgW}" height="${bag.imgH}" loading="lazy" />
             </button>
           `).join('')}
         </div>
