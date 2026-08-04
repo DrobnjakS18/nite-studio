@@ -64,12 +64,35 @@
       const descMod = bag.variant ? ` bag-desc--${bag.variant}` : '';
       const imgMod = bag.variant ? ` bag-image--${bag.variant}` : '';
       const specsMod = bag.variant ? ` bag-specs--${bag.variant}` : '';
+      const priceMod = bag.variant === 'nuage' ? ' bag-price--dark' : '';
       const rowMod = bag.variant === 'rubis' ? ' spec-row--light' : bag.variant === 'nuage' ? ' spec-row--dark' : '';
       const labelMod = bag.variant === 'rubis' ? ' spec-label--light' : bag.variant === 'nuage' ? ' spec-label--dark' : '';
       const valMod = bag.variant === 'nuage' ? ' spec-val--dark' : '';
       const linkMod = bag.variant ? ` request-link--${bag.variant}` : '';
       const underlineMod = bag.variant ? ` request-link-underline--${bag.variant}` : '';
       const arrowMod = bag.variant === 'rubis' ? ' request-arrow--cream' : bag.variant === 'nuage' ? ' request-arrow--ink' : '';
+      const dimsMod = bag.variant ? ` bag-dims--${bag.variant}` : '';
+
+      const dimsHtml = bag.dims ? `
+        <div class="bag-dims${dimsMod}">
+          ${bag.dims.map(([abbr, name, val]) => `
+            <div class="bag-dim">
+              <span class="bag-dim-abbr">${abbr}</span>
+              <span class="bag-dim-name">${name}</span>
+              ${Array.isArray(val) ? `
+                <div class="bag-dim-sub-list">
+                  ${val.map(([subLabel, subVal]) => `
+                    <div class="bag-dim-sub">
+                      <span class="bag-dim-sub-label">${subLabel}</span>
+                      <span class="bag-dim-sub-val">${subVal}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : `<span class="bag-dim-val">${val}</span>`}
+            </div>
+          `).join('')}
+        </div>
+      ` : '';
 
       const galleryHtml = bag.images.length > 1 ? `
         <div class="bag-gallery">
@@ -89,6 +112,9 @@
         <div class="lightbox-trigger bag-image-wrap" data-src="${bag.images[0]}" data-alt="${alt}">
           <img class="detail-img bag-image${imgMod}" src="${bag.images[0]}" alt="${alt}" width="${bag.imgW}" height="${bag.imgH}" loading="lazy" />
         </div>
+         ${galleryHtml}
+        <div class="bag-price${priceMod}">${bag.price}</div>
+        ${dimsHtml}
         <div class="bag-specs${specsMod}">
           ${bag.specs.map(([label, val]) => `
             <div class="spec-row${rowMod}">

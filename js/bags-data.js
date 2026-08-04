@@ -7,13 +7,20 @@ const BAGS = [
     variant: null,
     imgW: 1536,
     imgH: 2048,
-    images: ['assets/cacao.jpg', 'assets/cacao.jpg', 'assets/cacao.jpg'],
+    images: ['assets/olea/olea_1.webp', 'assets/olea/olea_2.webp', 'assets/olea/olea_3.webp', 'assets/olea/olea_4.webp', 'assets/olea/olea_5.webp'],
     desc: 'Zaobljena hobo torba sa jednom širokom ručkom koja naleže blizu ramena. Vez je ostavljen gust i nepravilan, tako da površina hvata svetlost drugačije iz svakog ugla.',
+    price: '7.900 RSD',
+    dims: [
+      ['Š', 'Širina', '30 cm'],
+      ['V', 'Visina', [
+        ['bez drške', '25 cm'],
+        ['sa drškom', '45 cm'],
+      ]],
+    ],
     specs: [
       ['Materijal', '100% pamučna traka'],
       ['Vez', 'Bobl bod, gust i nepravilan'],
       ['Silueta', 'Zaobljena hobo torba'],
-      ['Ručka', 'Jedna široka ručka za rame'],
       ['Detalji', 'Gravirana mesingana pločica'],
     ],
   },
@@ -27,6 +34,7 @@ const BAGS = [
     imgH: 2048,
     images: ['assets/foret.jpg', 'assets/foret.jpg', 'assets/foret.jpg'],
     desc: 'Dve pređe upletene zajedno, tako da se boja menja kako se torba pomera. Najteksturisaniji komad u kolekciji, onaj koji se prepoznaje kao ručna izrada i s druge strane sobe.',
+    price: '7.900 RSD',
     specs: [
       ['Materijal', 'Dve pamučne trake, upletene zajedno'],
       ['Vez', 'Dvobojni bobl bod'],
@@ -44,6 +52,7 @@ const BAGS = [
     imgH: 2048,
     images: ['assets/rubis.jpg', 'assets/rubis.jpg', 'assets/rubis.jpg'],
     desc: 'Mekana torba na rame sa dvostrukom trakom i biserima ukomponovanim u vez ručno, jedan po jedan, bez fiksnog rasporeda.',
+    price: '7.900 RSD',
     specs: [
       ['Materijal', '100% pamučna traka'],
       ['Vez', 'Jednostruki bod sa ukomponovanim biserima'],
@@ -62,6 +71,7 @@ const BAGS = [
     imgH: 1536,
     images: ['assets/nuage.jpg', 'assets/nuage.jpg', 'assets/nuage.jpg'],
     desc: 'Najmirniji komad. Strukturirana klač torbica u obliku jastuka sa prorezom za ručku i ravnomernim, čvrstim vezom. Napravljena za večeri kada torba ne treba da bude najupadljivija stvar u prostoriji.',
+    price: '7.900 RSD',
     specs: [
       ['Materijal', '100% pamučna traka'],
       ['Vez', 'Ravnomeran, čvrst jednostruki bod'],
@@ -80,10 +90,15 @@ const BAGS = [
     imgH: 2048,
     images: ['assets/maree.jpg', 'assets/maree.jpg', 'assets/maree.jpg'],
     desc: 'Najzahtevniji komad koji izrađujemo. Oko četrdeset privezaka i bisera, svaki pojedinačno ukomponovan u vez.',
+    price: '7.900 RSD',
+    dims: [
+      ['Š', 'Širina', '34 cm'],
+      ['D', 'Dubina', '26 cm'],
+      ['V', 'Visina', '11 cm'],
+    ],
     specs: [
       ['Materijal', '100% pamučna traka'],
       ['Vez', 'Gust jednostruki bod, strukturirano telo'],
-      ['Dimenzije', '34 × 26 × 11 cm'],
       ['Ručka', 'Ugrađeni izrez'],
       ['Detalji', 'Privesci u zlatnom tonu, stakleni biseri'],
       ['Kopča/okov', 'Gravirana mesingana pločica'],
