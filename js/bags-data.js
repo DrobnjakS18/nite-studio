@@ -21,6 +21,7 @@ const BAGS = [
       ['Materijal', '100% pamučna traka'],
       ['Vez', 'Bobl bod, gust i nepravilan'],
       ['Silueta', 'Zaobljena hobo torba'],
+      ['Ručka', 'Jedna široka ručka za rame'],
       ['Detalji', 'Gravirana mesingana pločica'],
     ],
   },
