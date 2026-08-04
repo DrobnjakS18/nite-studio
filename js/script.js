@@ -50,7 +50,7 @@
           <img class="collection-img collection-item-img${bag.variant === 'rubis' ? ' collection-item-img--rubis' : ''}" src="${bag.images[0]}" alt="${bagAlt(bag)}" width="${bag.imgW}" height="${bag.imgH}" loading="lazy" />
         </div>
         <div class="collection-item-name">${bag.name}</div>
-        <div class="collection-item-num">Komad Nº ${bag.num}</div>
+        <div class="collection-item-num">Piece Nº ${bag.num}</div>
       </button>
     `).join('');
   }
@@ -75,7 +75,7 @@
         <div class="bag-gallery">
           ${bag.images.map((src, i) => `
             <button class="bag-gallery-thumb${i === 0 ? ' active' : ''}" data-img="${i}">
-              <img src="${src}" alt="${bagAlt(bag)}, prikaz ${i + 1}" width="${bag.imgW}" height="${bag.imgH}" loading="lazy" />
+              <img src="${src}" alt="${bagAlt(bag)}, view ${i + 1}" width="${bag.imgW}" height="${bag.imgH}" loading="lazy" />
             </button>
           `).join('')}
         </div>
@@ -83,7 +83,7 @@
 
       // ${galleryHtml} - insert below class="lightbox-trigger
       inner.innerHTML = `
-        <div class="bag-kicker${kickerMod}">Komad Nº ${bag.num}</div>
+        <div class="bag-kicker${kickerMod}">Piece Nº ${bag.num}</div>
         <h2 class="bag-title">${bag.name}</h2>
         <p class="bag-desc${descMod}">${bag.desc}</p>
         <div class="lightbox-trigger bag-image-wrap" data-src="${bag.images[0]}" data-alt="${alt}">
@@ -97,7 +97,7 @@
           `).join('')}
         </div>
         <a href="#connect" class="request-link${linkMod}">
-          <span class="request-link-underline${underlineMod}">Poručite ${bag.name}</span>
+          <span class="request-link-underline${underlineMod}">Request ${bag.name}</span>
           <svg width="34" height="10" viewBox="0 0 34 10" fill="none" class="request-arrow${arrowMod}">
             <line x1="0" y1="5" x2="32" y2="5" />
             <path d="M27 1 L32 5 L27 9" />
