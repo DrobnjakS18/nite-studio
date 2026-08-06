@@ -1,4 +1,5 @@
-(() => {
+(async (seedBags) => {
+  const BAGS = await window.BagsDB.getBags(seedBags);
   const SLIDE_SECONDS = 5;
   const count = BAGS.length;
   let timer = null;
@@ -290,4 +291,4 @@
   window.addEventListener('scroll', sweep, { passive: true });
   window.addEventListener('resize', sweep);
   window.addEventListener('hashchange', sweep);
-})();
+})(BAGS);
