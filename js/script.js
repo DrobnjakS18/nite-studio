@@ -1,6 +1,7 @@
 (() => {
   const SLIDE_SECONDS = 5;
   const count = BAGS.length;
+  const hasBags = count > 0;
   let timer = null;
   let lightboxOpen = false;
 
@@ -8,9 +9,12 @@
     return `${bag.name} ${bag.altNoun}`;
   }
 
+  // When the last bag is sold (BAGS is emptied out in bags-data.js), the
+  // site collapses to hero + manifesto + contact — no collection to link to.
   function renderNav() {
     const collectionLink = document.querySelector('#navLinks a[href="#collection"]');
     if (!collectionLink) return;
+    if (!hasBags) { collectionLink.remove(); return; }
     const bagLinksHtml = BAGS.map((bag) => `<a href="#${bag.id}" class="close-menu nav-link">${bag.name}</a>`).join('');
     collectionLink.insertAdjacentHTML('afterend', bagLinksHtml);
   }
@@ -18,7 +22,22 @@
   function renderFooterLinks() {
     const wrap = document.getElementById('footerCollectionLinks');
     if (!wrap) return;
+    if (!hasBags) { wrap.closest('.footer-grid > div')?.remove(); return; }
     wrap.innerHTML = BAGS.map((bag) => `<a href="#${bag.id}" class="footer-link">${bag.name}</a>`).join('');
+  }
+
+  // Once nothing is left for sale, drop the hero's "see the collection"
+  // link — there's no collection section left to point it at.
+  function renderHeroState() {
+    if (hasBags) return;
+    const sub = document.querySelector('.hero-sub');
+    if (sub) sub.textContent = 'Trenutno nema dostupnih torbi.';
+    const cta = document.querySelector('#hero .request-link');
+    if (cta) {
+      cta.setAttribute('href', '#connect');
+      const label = cta.querySelector('.request-link-underline');
+      if (label) label.textContent = 'Pišite nam na Instagramu';
+    }
   }
 
   function slideHtml(bag, i, isClone) {
@@ -33,6 +52,7 @@
   }
 
   function renderSlider() {
+    if (!hasBags) { document.getElementById('collection')?.remove(); return; }
     const track = document.getElementById('sliderTrack');
     const first = BAGS[0];
     const last = BAGS[BAGS.length - 1];
@@ -43,6 +63,7 @@
   }
 
   function renderThumbs() {
+    if (!hasBags) return;
     const wrap = document.querySelector('.collection-thumbs');
     wrap.innerHTML = BAGS.map((bag, i) => `
       <button class="collection-thumb${i === 0 ? ' active' : ''}" data-thumb="${i}">
@@ -55,10 +76,24 @@
     `).join('');
   }
 
+  // Each bag gets its own <section>, built entirely here rather than filled
+  // into a pre-existing element in index.html — so removing a sold bag from
+  // BAGS in bags-data.js is enough to drop it everywhere (nav, slider,
+  // thumbnails, detail section) with no matching HTML edit required.
   function renderBagSections() {
+    const container = document.getElementById('bagSections');
+    if (!container) return;
+    container.innerHTML = '';
     BAGS.forEach((bag) => {
-      const inner = document.querySelector(`#${bag.id} .bag-inner`);
-      if (!inner) return;
+      const section = document.createElement('section');
+      section.id = bag.id;
+      section.className = 'bag-section';
+      const inner = document.createElement('div');
+      inner.setAttribute('data-reveal', '1');
+      inner.className = 'bag-inner';
+      section.appendChild(inner);
+      container.appendChild(section);
+
       const alt = bagAlt(bag);
       const kickerMod = bag.variant === 'rubis' ? ' bag-kicker--light' : bag.variant === 'nuage' ? ' bag-kicker--dark' : '';
       const descMod = bag.variant ? ` bag-desc--${bag.variant}` : '';
@@ -148,73 +183,79 @@
 
   renderNav();
   renderFooterLinks();
+  renderHeroState();
   renderSlider();
   renderThumbs();
   renderBagSections();
 
-  const track = document.getElementById('sliderTrack');
-  const thumbs = Array.from(document.querySelectorAll('.collection-thumb'));
+  // The slider only exists once renderSlider() has confirmed there's stock
+  // to show — with an empty BAGS array, #collection (and #sliderTrack with
+  // it) was removed above, so none of this control logic should run.
+  if (hasBags) {
+    const track = document.getElementById('sliderTrack');
+    const thumbs = Array.from(document.querySelectorAll('.collection-thumb'));
 
-  // Real slides sit at pos 1..count; pos 0 and count+1 are the cloned
-  // last/first slides that make the loop feel infinite.
-  let pos = 1;
+    // Real slides sit at pos 1..count; pos 0 and count+1 are the cloned
+    // last/first slides that make the loop feel infinite.
+    let pos = 1;
 
-  function paintSlider(withTransition) {
-    track.style.transition = withTransition ? '' : 'none';
-    track.style.transform = `translateX(-${pos * 100}%)`;
-    const logical = ((pos - 1) % count + count) % count;
-    thumbs.forEach((t, i) => t.classList.toggle('active', i === logical));
-    if (!withTransition) {
-      requestAnimationFrame(() => { track.style.transition = ''; });
-    }
+    const paintSlider = (withTransition) => {
+      track.style.transition = withTransition ? '' : 'none';
+      track.style.transform = `translateX(-${pos * 100}%)`;
+      const logical = ((pos - 1) % count + count) % count;
+      thumbs.forEach((t, i) => t.classList.toggle('active', i === logical));
+      if (!withTransition) {
+        requestAnimationFrame(() => { track.style.transition = ''; });
+      }
+    };
+
+    // Matches the .slider-track transition duration in style.css, plus a
+    // small margin. While an animated move is in flight, arrow/thumb clicks
+    // are ignored so rapid clicking can't queue up moves faster than the
+    // slider can visually keep up with.
+    const ANIM_MS = 900;
+    let animating = false;
+    let animLockTimer = null;
+
+    const goToPos = (n, withTransition = true) => {
+      pos = n;
+      paintSlider(withTransition);
+      if (withTransition) {
+        animating = true;
+        clearTimeout(animLockTimer);
+        animLockTimer = setTimeout(() => { animating = false; }, ANIM_MS);
+      }
+    };
+
+    // If we're resting on a cloned slide (0 or count+1), snap instantly to
+    // the matching real slide before moving further — the clone and the
+    // real slide look identical, so the jump is invisible, and it means
+    // `pos` never drifts past the clones no matter how fast someone clicks.
+    const settleIfNeeded = () => {
+      if (pos === 0) goToPos(count, false);
+      else if (pos === count + 1) goToPos(1, false);
+    };
+
+    const next = () => { settleIfNeeded(); goToPos(pos + 1); };
+    const prev = () => { settleIfNeeded(); goToPos(pos - 1); };
+    const goToIndex = (i) => { settleIfNeeded(); goToPos(((i % count) + count) % count + 1); };
+
+    const startAuto = () => {
+      stopAuto();
+      timer = setInterval(() => {
+        if (lightboxOpen) return;
+        next();
+      }, SLIDE_SECONDS * 1000);
+    };
+    const stopAuto = () => { if (timer) clearInterval(timer); timer = null; };
+
+    document.getElementById('prevBtn').addEventListener('click', () => { if (animating) return; prev(); startAuto(); });
+    document.getElementById('nextBtn').addEventListener('click', () => { if (animating) return; next(); startAuto(); });
+    thumbs.forEach((t) => t.addEventListener('click', () => { if (animating) return; goToIndex(parseInt(t.dataset.thumb, 10) || 0); startAuto(); }));
+
+    paintSlider(false);
+    startAuto();
   }
-
-  // Matches the .slider-track transition duration in style.css, plus a
-  // small margin. While an animated move is in flight, arrow/thumb clicks
-  // are ignored so rapid clicking can't queue up moves faster than the
-  // slider can visually keep up with.
-  const ANIM_MS = 900;
-  let animating = false;
-  let animLockTimer = null;
-
-  function goToPos(n, withTransition = true) {
-    pos = n;
-    paintSlider(withTransition);
-    if (withTransition) {
-      animating = true;
-      clearTimeout(animLockTimer);
-      animLockTimer = setTimeout(() => { animating = false; }, ANIM_MS);
-    }
-  }
-
-  // If we're resting on a cloned slide (0 or count+1), snap instantly to
-  // the matching real slide before moving further — the clone and the
-  // real slide look identical, so the jump is invisible, and it means
-  // `pos` never drifts past the clones no matter how fast someone clicks.
-  function settleIfNeeded() {
-    if (pos === 0) goToPos(count, false);
-    else if (pos === count + 1) goToPos(1, false);
-  }
-
-  function next() { settleIfNeeded(); goToPos(pos + 1); }
-  function prev() { settleIfNeeded(); goToPos(pos - 1); }
-  function goToIndex(i) { settleIfNeeded(); goToPos(((i % count) + count) % count + 1); }
-
-  function startAuto() {
-    stopAuto();
-    timer = setInterval(() => {
-      if (lightboxOpen) return;
-      next();
-    }, SLIDE_SECONDS * 1000);
-  }
-  function stopAuto() { if (timer) clearInterval(timer); timer = null; }
-
-  document.getElementById('prevBtn').addEventListener('click', () => { if (animating) return; prev(); startAuto(); });
-  document.getElementById('nextBtn').addEventListener('click', () => { if (animating) return; next(); startAuto(); });
-  thumbs.forEach((t) => t.addEventListener('click', () => { if (animating) return; goToIndex(parseInt(t.dataset.thumb, 10) || 0); startAuto(); }));
-
-  paintSlider(false);
-  startAuto();
 
   // Mobile nav
   const burger = document.getElementById('burger');
