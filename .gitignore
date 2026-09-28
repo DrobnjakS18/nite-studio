@@ -3,7 +3,6 @@ Thumbs.db
 *.log
 .vscode/
 .idea/
-CLAUDE.md
 node_modules/
 .env
 .env.*
