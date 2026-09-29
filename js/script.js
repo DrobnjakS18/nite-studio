@@ -3,6 +3,12 @@
   const hasBags = count > 0;
   const IG_DM = 'https://ig.me/m/nite.studio_';
 
+  // For values interpolated into HTML attributes (alt text), so a quote in
+  // a bag's name can't break the markup.
+  function esc(s) {
+    return String(s).replace(/[&"<>]/g, (c) => ({ '&': '&amp;', '"': '&quot;', '<': '&lt;', '>': '&gt;' })[c]);
+  }
+
   function bagAlt(bag) {
     return `${bag.name} ${bag.altNoun}`;
   }
@@ -27,8 +33,8 @@
     gallery: '(max-width: 899px) 100vw, 60vw',
   };
 
-  function img(bag, src, sizes, alt, loading = 'lazy', cls = '') {
-    return `<img srcset="${srcsetFor(bag, src)}" sizes="${sizes}" src="${src}" alt="${alt}" width="${bag.imgW}" height="${bag.imgH}" loading="${loading}"${cls ? ` class="${cls}"` : ''} />`;
+  function img(bag, src, sizes, alt, { loading = 'lazy', cls = '', priority = false } = {}) {
+    return `<img srcset="${srcsetFor(bag, src)}" sizes="${sizes}" src="${src}" alt="${esc(alt)}" width="${bag.imgW}" height="${bag.imgH}" loading="${loading}" decoding="async"${priority ? ' fetchpriority="high"' : ''}${cls ? ` class="${cls}"` : ''} />`;
   }
 
   // ---------------------------------------------------------------------
@@ -49,6 +55,9 @@
         'Trenutno nema dostupnih torbi. <a href="#connect" class="text-link">Pišite nam na Instagramu</a>';
       document.querySelector('#navLinks a[href="#collection"]')?.remove();
       document.getElementById('footerCollection')?.remove();
+      document.querySelector('.order-title').textContent = 'Ostanimo u kontaktu';
+      document.querySelector('.order-desc').textContent =
+        'Svi komadi su pronašli vlasnike. Za pitanja nam pišite na Instagramu.';
       return;
     }
 
@@ -70,12 +79,12 @@
       const feature = featureFirst && i === 0;
       const sizes = feature ? SIZES.feature : SIZES.tile;
       const second = views[1]
-        ? img(bag, views[1], sizes, '', 'lazy', 'tile-img tile-img--alt')
+        ? img(bag, views[1], sizes, '', { cls: 'tile-img tile-img--alt' })
         : '';
       return `
         <a href="#${bag.id}" class="tile${feature ? ' tile--feature' : ''}${second ? ' tile--has-alt' : ''}">
           <span class="tile-media">
-            ${img(bag, views[0], sizes, bagAlt(bag), i < 3 ? 'eager' : 'lazy', 'tile-img')}
+            ${img(bag, views[0], sizes, '', { loading: i < 3 ? 'eager' : 'lazy', cls: 'tile-img', priority: i === 0 })}
             ${second}
           </span>
           <span class="tile-info">
@@ -98,19 +107,59 @@
   renderCatalogue();
 
   // ---------------------------------------------------------------------
+  // Lightbox: zooms one gallery photo above the product panel. Focus moves
+  // to its close button, Tab can't leave it, and focus returns to the photo.
+
+  const product = document.getElementById('product');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxClose = document.getElementById('lightboxClose');
+  // Created here and inserted on first use, so the page never holds an
+  // <img> without a src.
+  const lightboxImg = document.createElement('img');
+  lightboxImg.className = 'lightbox-img';
+  let lightboxOpen = false;
+  let lightboxReturnFocus = null;
+
+  function openImage(src, alt, opener) {
+    lightboxImg.src = src;
+    if (!lightboxImg.isConnected) lightbox.prepend(lightboxImg);
+    lightboxImg.alt = alt || '';
+    lightbox.hidden = false;
+    lightboxOpen = true;
+    lightboxReturnFocus = opener || null;
+    product.inert = true;
+    lightboxClose.focus();
+  }
+  // `restoreFocus: false` when the panel under it is also changing (Back
+  // button, hash navigation), so focus isn't sent to a photo that is gone.
+  function closeImage({ restoreFocus = true } = {}) {
+    if (!lightboxOpen) return;
+    lightbox.hidden = true;
+    lightboxOpen = false;
+    product.inert = false;
+    if (restoreFocus && lightboxReturnFocus) lightboxReturnFocus.focus();
+    lightboxReturnFocus = null;
+  }
+  lightbox.addEventListener('click', () => closeImage());
+  lightboxClose.addEventListener('click', (e) => { e.stopPropagation(); closeImage(); });
+
+  // ---------------------------------------------------------------------
   // Product panel: a full-screen dialog opened by a bag's hash (its `id`,
   // e.g. #cacao), so every tile, rail item, nav and footer link is a plain
   // anchor, the back button closes it, and a shared link like /#rubis opens
   // straight onto that piece.
 
   const page = document.querySelector('.page');
-  const product = document.getElementById('product');
   const productBody = document.getElementById('productBody');
   const productCrumb = document.getElementById('productCrumb');
   const productClose = document.getElementById('productClose');
-  const backgroundRegions = ['#site-header', '#main', '#contact'].map((s) => page.querySelector(s));
+  const backgroundRegions = ['.skip-link', '#site-header', '#main', '#contact'].map((s) => page.querySelector(s));
   let productOpen = false;
+  let productBag = null;
   let productReturnFocus = null;
+  // True when the panel was opened by a link on this page (so the entry
+  // before it in history is the catalogue), false for a deep link.
+  let openedInPage = false;
 
   function productHtml(bag) {
     const views = uniqueImages(bag);
@@ -118,8 +167,8 @@
     const next = BAGS[(BAGS.indexOf(bag) + 1) % count];
 
     const gallery = views.map((src, i) => `
-      <button type="button" class="gallery-item" data-src="${src}" data-alt="${alt}, prikaz ${i + 1}" aria-label="Uvećaj fotografiju ${i + 1} od ${views.length}">
-        ${img(bag, src, SIZES.gallery, `${alt}, prikaz ${i + 1}`, i === 0 ? 'eager' : 'lazy')}
+      <button type="button" class="gallery-item" data-src="${src}" data-alt="${esc(`${alt}, prikaz ${i + 1}`)}" aria-label="Uvećaj fotografiju ${i + 1} od ${views.length}">
+        ${img(bag, src, SIZES.gallery, `${alt}, prikaz ${i + 1}`, { loading: i === 0 ? 'eager' : 'lazy' })}
       </button>
     `).join('');
 
@@ -162,11 +211,7 @@
           </dl>
         </details>
         ${dims}
-        <details class="acc">
-          <summary>Porudžbina i preuzimanje</summary>
-          <p class="acc-text">Pišite nam na Instagramu za porudžbinu. Lično preuzimanje u Beogradu, slanje po Srbiji dogovorom.</p>
-        </details>
-        ${count > 1 ? `<a href="#${next.id}" class="product-next">Sledeći komad: ${next.name}</a>` : ''}
+        ${count > 1 ? `<a href="#${next.id}" class="product-next" id="productNext">Sledeći komad: ${next.name}</a>` : ''}
       </div>
     `;
   }
@@ -204,10 +249,17 @@
 
   function openProduct(bag) {
     if (!productOpen) productReturnFocus = document.activeElement;
+    productBag = bag;
     productBody.innerHTML = productHtml(bag);
     productCrumb.textContent = bag.name;
     wireGallery();
     wireOrder(bag);
+    // Paging through pieces replaces the history entry, so one Back (or
+    // closing) always returns to the catalogue rather than the last piece.
+    document.getElementById('productNext')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      location.replace(e.currentTarget.getAttribute('href'));
+    });
     product.scrollTop = 0;
     if (!productOpen) {
       product.hidden = false;
@@ -220,16 +272,30 @@
 
   function closeProduct({ clearHash = true } = {}) {
     if (!productOpen) return;
+    // Opened from the catalogue: step back to that entry instead, so Back
+    // afterwards doesn't land on a duplicate of this page. Its hashchange
+    // comes straight back here with clearHash: false.
+    if (clearHash && openedInPage) {
+      history.back();
+      return;
+    }
     product.hidden = true;
     productOpen = false;
+    openedInPage = false;
     backgroundRegions.forEach((el) => { el.inert = false; });
     document.body.style.overflow = '';
-    // Drop the bag's hash without adding a history entry or scrolling.
+    // Deep link: drop the bag's hash without adding a history entry or scrolling.
     if (clearHash && BAGS.some((b) => `#${b.id}` === location.hash)) {
       history.replaceState(null, '', location.pathname + location.search);
     }
-    if (productReturnFocus && document.contains(productReturnFocus)) productReturnFocus.focus();
+    // The opener may now be hidden (a link in the closed mobile menu, or
+    // nothing for a deep link); fall back to that piece's tile.
+    const opener = productReturnFocus && productReturnFocus.offsetParent !== null
+      ? productReturnFocus
+      : document.querySelector(`#grid a[href="#${productBag.id}"]`);
+    opener?.focus();
     productReturnFocus = null;
+    productBag = null;
   }
 
   // A link to a piece that has since sold lands on the catalogue with one
@@ -253,6 +319,8 @@
   }
 
   function syncFromHash() {
+    // Back pressed while a photo is zoomed closes the photo with the panel.
+    closeImage({ restoreFocus: false });
     const bag = BAGS.find((b) => `#${b.id}` === location.hash);
     if (bag) openProduct(bag);
     else {
@@ -261,7 +329,10 @@
     }
   }
 
-  window.addEventListener('hashchange', syncFromHash);
+  window.addEventListener('hashchange', () => {
+    if (!productOpen) openedInPage = true;
+    syncFromHash();
+  });
   productClose.addEventListener('click', () => closeProduct());
   syncFromHash();
 
@@ -282,40 +353,6 @@
   }
   burger.addEventListener('click', toggleMenu);
   document.querySelectorAll('.close-menu').forEach((el) => el.addEventListener('click', closeMenu));
-
-  // ---------------------------------------------------------------------
-  // Lightbox: zooms one gallery photo above the product panel. Focus moves
-  // to its close button, Tab can't leave it, and focus returns to the photo.
-
-  const lightbox = document.getElementById('lightbox');
-  const lightboxClose = document.getElementById('lightboxClose');
-  // Created here and inserted on first use, so the page never holds an
-  // <img> without a src.
-  const lightboxImg = document.createElement('img');
-  lightboxImg.className = 'lightbox-img';
-  let lightboxOpen = false;
-  let lightboxReturnFocus = null;
-
-  function openImage(src, alt, opener) {
-    lightboxImg.src = src;
-    if (!lightboxImg.isConnected) lightbox.prepend(lightboxImg);
-    lightboxImg.alt = alt || '';
-    lightbox.hidden = false;
-    lightboxOpen = true;
-    lightboxReturnFocus = opener || null;
-    product.inert = true;
-    lightboxClose.focus();
-  }
-  function closeImage() {
-    if (!lightboxOpen) return;
-    lightbox.hidden = true;
-    lightboxOpen = false;
-    product.inert = false;
-    if (lightboxReturnFocus) lightboxReturnFocus.focus();
-    lightboxReturnFocus = null;
-  }
-  lightbox.addEventListener('click', closeImage);
-  lightboxClose.addEventListener('click', (e) => { e.stopPropagation(); closeImage(); });
 
   // Escape closes the topmost layer only. Tab stays inside whichever dialog
   // is on top; everything behind it is inert while it is open.

@@ -10,3 +10,7 @@ npm-debug.log*
 *.swp
 *.swo
 *~
+# Design/review tooling output
+.playwright-mcp/
+.impeccable/review/
+.impeccable/critique/

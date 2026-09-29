@@ -664,6 +664,12 @@ img {
   /* Column titles sit on the wordmark's cap line rather than its top. */
   padding-top: 10px;
 }
+/* Sold out: the Kolekcija column is removed, so close the empty slot. */
+@media (min-width: 900px) {
+  .footer-grid:not(:has(#footerCollection)) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
 .footer-col-title {
   margin: 0 0 16px;
 }
