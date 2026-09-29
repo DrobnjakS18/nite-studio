@@ -157,9 +157,19 @@
   let productOpen = false;
   let productBag = null;
   let productReturnFocus = null;
-  // True when the panel was opened by a link on this page (so the entry
-  // before it in history is the catalogue), false for a deep link.
-  let openedInPage = false;
+  // Every history entry this page creates carries its depth in
+  // history.state: the entry the visitor landed on is 0, and each in-page
+  // hash navigation adds 1. It lives on the entry itself, so it survives a
+  // reload and Back/Forward. Depth > 0 means the entry before this one is
+  // this page too, so closing can step back to it; depth 0 (a deep link, or
+  // a hash typed onto one) must never step back, or it would leave the site.
+  const depth = () => history.state?.depth ?? 0;
+  if (typeof history.state?.depth !== 'number') {
+    history.replaceState({ ...history.state, depth: 0 }, '');
+  }
+  let lastDepth = depth();
+  // Set while a history.back() from closeProduct() is waiting for its hashchange.
+  let closing = false;
 
   function productHtml(bag) {
     const views = uniqueImages(bag);
@@ -249,16 +259,19 @@
 
   function openProduct(bag) {
     if (!productOpen) productReturnFocus = document.activeElement;
+    closing = false;
     productBag = bag;
     productBody.innerHTML = productHtml(bag);
     productCrumb.textContent = bag.name;
     wireGallery();
     wireOrder(bag);
-    // Paging through pieces replaces the history entry, so one Back (or
-    // closing) always returns to the catalogue rather than the last piece.
+    // Paging through pieces replaces the history entry (keeping its depth),
+    // so one Back (or closing) returns to where the panel was opened from
+    // rather than the last piece.
     document.getElementById('productNext')?.addEventListener('click', (e) => {
       e.preventDefault();
-      location.replace(e.currentTarget.getAttribute('href'));
+      history.replaceState(history.state, '', e.currentTarget.getAttribute('href'));
+      syncFromHash();
     });
     product.scrollTop = 0;
     if (!productOpen) {
@@ -272,21 +285,26 @@
 
   function closeProduct({ clearHash = true } = {}) {
     if (!productOpen) return;
-    // Opened from the catalogue: step back to that entry instead, so Back
-    // afterwards doesn't land on a duplicate of this page. Its hashchange
-    // comes straight back here with clearHash: false.
-    if (clearHash && openedInPage) {
-      history.back();
+    // Reached from another entry of this page: step back to it instead, so
+    // Back afterwards doesn't land on a duplicate. Its hashchange comes
+    // straight back here with clearHash: false.
+    if (clearHash && depth() > 0) {
+      // A second X/Escape before that hashchange lands must not step back
+      // again, or it leaves the site.
+      if (!closing) {
+        closing = true;
+        history.back();
+      }
       return;
     }
+    closing = false;
     product.hidden = true;
     productOpen = false;
-    openedInPage = false;
     backgroundRegions.forEach((el) => { el.inert = false; });
     document.body.style.overflow = '';
     // Deep link: drop the bag's hash without adding a history entry or scrolling.
     if (clearHash && BAGS.some((b) => `#${b.id}` === location.hash)) {
-      history.replaceState(null, '', location.pathname + location.search);
+      history.replaceState(history.state, '', location.pathname + location.search);
     }
     // The opener may now be hidden (a link in the closed mobile menu, or
     // nothing for a deep link); fall back to that piece's tile.
@@ -313,7 +331,7 @@
     notice.textContent = hasBags
       ? 'Ovaj komad je pronašao vlasnika. Ostali komadi su ispod.'
       : 'Ovaj komad je pronašao vlasnika.';
-    history.replaceState(null, '', location.pathname + location.search);
+    history.replaceState(history.state, '', location.pathname + location.search);
     notice.focus({ preventScroll: true });
     document.getElementById('collection').scrollIntoView();
   }
@@ -330,7 +348,13 @@
   }
 
   window.addEventListener('hashchange', () => {
-    if (!productOpen) openedInPage = true;
+    // A brand-new entry (link click, typed hash) arrives with no state;
+    // stamp it one deeper than the entry it came from. Back/Forward land on
+    // entries already stamped, so their depth is simply read back.
+    if (typeof history.state?.depth !== 'number') {
+      history.replaceState({ ...history.state, depth: lastDepth + 1 }, '');
+    }
+    lastDepth = depth();
     syncFromHash();
   });
   productClose.addEventListener('click', () => closeProduct());
