@@ -1,3 +1,8 @@
+// Ids of pieces that have sold. Old Instagram posts and shared links keep
+// pointing at them, so a visit to e.g. /#rubis shows a quiet notice instead
+// of silently landing on the page. Add a bag's id here when you delete it.
+const SOLD_IDS = [];
+
 const BAGS = [
   {
     id: 'cacao',
@@ -5,8 +10,8 @@ const BAGS = [
     name: 'Olea',
     altNoun: 'torba',
     variant: null,
-    imgW: 1536,
-    imgH: 2048,
+    imgW: 1080,
+    imgH: 1350,
     images: ['assets/olea/olea_1.webp', 'assets/olea/olea_2.webp', 'assets/olea/olea_3.webp', 'assets/olea/olea_4.webp', 'assets/olea/olea_5.webp'],
     desc: 'Zaobljena hobo torba sa jednom širokom ručkom koja naleže blizu ramena. Vez je ostavljen gust i nepravilan, tako da površina hvata svetlost drugačije iz svakog ugla.',
     price: '7.900 RSD',

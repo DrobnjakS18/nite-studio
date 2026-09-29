@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-28T12:00:00Z",
+  "title": "Design System: NITÉ",
+  "extensions": {
+    "colorMeta": {
+      "paper": { "role": "neutral", "displayName": "Gallery White", "canonical": "#ffffff", "tonalRamp": ["#1f1f1f", "#3b3b3b", "#5a5a5a", "#7b7b7b", "#9e9e9e", "#c2c2c2", "#e4e4e4", "#ffffff"] },
+      "tile": { "role": "neutral", "displayName": "Linen Tile", "canonical": "#f4f3f1", "tonalRamp": ["#22211f", "#3d3b38", "#5b5955", "#7c7a75", "#9e9b96", "#c1beb9", "#e1dfdb", "#f4f3f1"] },
+      "ink": { "role": "neutral", "displayName": "Press Ink", "canonical": "#141414", "tonalRamp": ["#141414", "#2e2e2e", "#4a4a4a", "#6b6b6b", "#8e8e8e", "#b3b3b3", "#d8d8d8", "#f2f2f2"] },
+      "grey": { "role": "neutral", "displayName": "Catalogue Grey", "canonical": "#6b6b6b", "tonalRamp": ["#1c1c1c", "#333333", "#4d4d4d", "#6b6b6b", "#8a8a8a", "#ababab", "#cfcfcf", "#f0f0f0"] },
+      "line": { "role": "neutral", "displayName": "Hairline", "canonical": "#e6e4e0", "tonalRamp": ["#22211e", "#3c3a37", "#5a5853", "#7b7873", "#9d9a94", "#c0bcb6", "#e6e4e0", "#f7f6f4"] },
+      "night": { "role": "neutral", "displayName": "Showroom Black", "canonical": "#111111", "tonalRamp": ["#111111", "#2b2b2b", "#474747", "#666666", "#888888", "#adadad", "#d3d3d3", "#f5f5f5"] },
+      "night-muted": { "role": "neutral", "displayName": "Night Veil", "canonical": "rgba(255, 255, 255, 0.72)", "tonalRamp": ["rgba(255,255,255,0.16)", "rgba(255,255,255,0.28)", "rgba(255,255,255,0.40)", "rgba(255,255,255,0.52)", "rgba(255,255,255,0.64)", "rgba(255,255,255,0.72)", "rgba(255,255,255,0.86)", "rgba(255,255,255,1)"] }
+    },
+    "typographyMeta": {
+      "wordmark": { "displayName": "Wordmark", "purpose": "Centred NITÉ in the header bar; 1.375rem below 900px." },
+      "display": { "displayName": "Display", "purpose": "Footer NITÉ only, sized to span the full width between gutters." },
+      "headline": { "displayName": "Headline", "purpose": "Editorial section titles (manifesto, made by hand, order band)." },
+      "title": { "displayName": "Title", "purpose": "The left-aligned catalogue title." },
+      "product-name": { "displayName": "Product Name", "purpose": "Bag name heading the product panel." },
+      "body": { "displayName": "Body", "purpose": "Descriptions and editorial copy, max 34-40em." },
+      "body-small": { "displayName": "Body Small", "purpose": "Subtitle, spec rows, hints, footer links and notes." },
+      "label": { "displayName": "Label", "purpose": "The single tracked-uppercase voice for every small fact: nav, toolbar, tile info, breadcrumb, accordion summaries, footer titles." },
+      "button": { "displayName": "Button", "purpose": "The label voice one step up, for full-width button bars only." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "The one easing for reveals, panel entry, underline draw, hover scale and crossfade." },
+      { "name": "tile-crossfade", "value": "opacity 0.6s var(--ease-out)", "purpose": "Tile hover crossfade to the bag's second distinct view." },
+      { "name": "tile-scale", "value": "transform 1.2s var(--ease-out), scale 1.035", "purpose": "Tile hover when no second view exists; removed under reduced motion." },
+      { "name": "panel-in", "value": "opacity 0 -> 1, translateY(14px) -> none, 0.42s var(--ease-out)", "purpose": "Product panel entry; fade only under reduced motion." },
+      { "name": "reveal", "value": "opacity + translateY(20px), 0.9s var(--ease-out)", "purpose": "Section scroll reveal; 0.5s fade only under reduced motion." },
+      { "name": "state-color", "value": "0.3s", "purpose": "Button background, link colour and accordion transitions." }
+    ],
+    "breakpoints": [
+      { "name": "narrow", "value": "599px", "purpose": "Toolbar note hidden at and below." },
+      { "name": "mobile", "value": "899px", "purpose": "Gutter 16px, bar 56px, burger menu, single-column editorial, swipe gallery and fixed order bar at and below." },
+      { "name": "grid-4", "value": "1024px", "purpose": "Catalogue switches from 2 to 4 columns with a 2x2 feature tile." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Dark Order Bar",
+      "kind": "button",
+      "refersTo": "button-dark",
+      "description": "Full-width flat black bar for the one ordering action in the product panel.",
+      "html": "<a href=\"#\" class=\"ds-btn-dark\">Poručite putem Instagrama</a>",
+      "css": ".ds-btn-dark { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 52px; padding: 0 40px; background: var(--ink, #141414); color: var(--paper, #ffffff); font-family: Inter, system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; border: 0; border-radius: 0; transition: background-color 0.3s, color 0.3s; } .ds-btn-dark:hover { background: #3a3a3a; } .ds-btn-dark:focus-visible { outline: 2px solid var(--ink, #141414); outline-offset: 3px; }"
+    },
+    {
+      "name": "Light Bar on Night",
+      "kind": "button",
+      "refersTo": "button-light",
+      "description": "White flat bar used on the black order band.",
+      "html": "<div class=\"ds-night\"><a href=\"#\" class=\"ds-btn-light\">Pišite nam na Instagramu</a></div>",
+      "css": ".ds-night { background: var(--night, #111111); padding: 40px; display: flex; justify-content: center; } .ds-btn-light { display: flex; align-items: center; justify-content: center; min-width: 280px; min-height: 52px; padding: 0 40px; background: var(--paper, #ffffff); color: var(--ink, #141414); font-family: Inter, system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; border-radius: 0; transition: background-color 0.3s; } .ds-btn-light:hover { background: #e7e5e1; } .ds-btn-light:focus-visible { outline: 2px solid var(--paper, #ffffff); outline-offset: 3px; }"
+    },
+    {
+      "name": "Header Bar",
+      "kind": "nav",
+      "refersTo": "header-bar",
+      "description": "Sticky hairline bar: label-voice links left, Bodoni NITÉ centred, order link and Instagram mark right.",
+      "html": "<header class=\"ds-bar\"><nav class=\"ds-nav\"><a href=\"#\" class=\"ds-nav-link\">Kolekcija</a><a href=\"#\" class=\"ds-nav-link\">Ručna izrada</a><a href=\"#\" class=\"ds-nav-link\">O imenu</a></nav><a href=\"#\" class=\"ds-wordmark\">NITÉ</a><div class=\"ds-bar-end\"><a href=\"#\" class=\"ds-nav-link\">Porudžbina</a><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><rect x=\"3.5\" y=\"3.5\" width=\"17\" height=\"17\" rx=\"4.5\" stroke=\"currentColor\" stroke-width=\"1.3\"/><circle cx=\"12\" cy=\"12\" r=\"3.9\" stroke=\"currentColor\" stroke-width=\"1.3\"/><circle cx=\"17.2\" cy=\"6.8\" r=\"0.9\" fill=\"currentColor\"/></svg></div></header>",
+      "css": ".ds-bar { height: 60px; padding: 0 32px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; background: var(--paper, #ffffff); color: var(--ink, #141414); border-bottom: 1px solid var(--line, #e6e4e0); } .ds-nav { display: flex; gap: 28px; } .ds-bar-end { display: flex; justify-content: flex-end; align-items: center; gap: 16px; } .ds-nav-link { display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-decoration: none; font-family: Inter, system-ui, sans-serif; font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; background-image: linear-gradient(currentColor, currentColor); background-size: 0 1px; background-position: 0 calc(50% + 0.75em); background-repeat: no-repeat; transition: background-size 0.35s cubic-bezier(0.16, 1, 0.3, 1); } .ds-nav-link:hover { background-size: 100% 1px; } .ds-nav-link:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; } .ds-wordmark { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.625rem; font-weight: 500; letter-spacing: 0.16em; line-height: 1; padding: 8px 0 8px 0.16em; color: inherit; text-decoration: none; }"
+    },
+    {
+      "name": "Product Tile",
+      "kind": "card",
+      "refersTo": "product-tile",
+      "description": "4:5 Linen Tile image slot with label-voice name, piece meta and price; hover crossfades to a second view.",
+      "html": "<a href=\"#\" class=\"ds-tile\"><span class=\"ds-tile-media\"><span class=\"ds-tile-img\"></span><span class=\"ds-tile-img ds-tile-img--alt\"></span></span><span class=\"ds-tile-info\"><span class=\"ds-tile-name\">Olea</span><span class=\"ds-tile-meta\">Komad Nº 01 · Torba</span><span class=\"ds-tile-price\">7.900 RSD</span></span></a>",
+      "css": ".ds-tile { display: flex; flex-direction: column; width: 240px; color: var(--ink, #141414); text-decoration: none; } .ds-tile-media { position: relative; display: block; aspect-ratio: 4 / 5; background: var(--tile, #f4f3f1); overflow: hidden; } .ds-tile-img { position: absolute; inset: 0; background: linear-gradient(160deg, #4a2f30, #2a1a1b); transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1); } .ds-tile-img--alt { background: linear-gradient(200deg, #5a3b3c, #321f20); opacity: 0; } .ds-tile:hover .ds-tile-img--alt { opacity: 1; } .ds-tile:focus-visible { outline: 2px solid var(--ink, #141414); outline-offset: 4px; } .ds-tile-info { display: grid; gap: 3px; padding-top: 12px; font-family: Inter, system-ui, sans-serif; font-size: 0.6875rem; letter-spacing: 0.09em; text-transform: uppercase; } .ds-tile-name { font-weight: 500; } .ds-tile-meta { font-weight: 400; color: var(--grey, #6b6b6b); } .ds-tile-price { margin-top: 5px; font-weight: 400; }"
+    },
+    {
+      "name": "Spec Accordion",
+      "kind": "custom",
+      "refersTo": "product-tile",
+      "description": "Hairline-ruled details row with label-voice summary, drawn plus/minus, and grey-term / ink-value spec rows.",
+      "html": "<details class=\"ds-acc\" open><summary>Detalji</summary><dl class=\"ds-spec\"><div class=\"ds-spec-row\"><dt>Materijal</dt><dd>Pamučna traka</dd></div><div class=\"ds-spec-row\"><dt>Vez</dt><dd>Bobl bod</dd></div></dl></details>",
+      "css": ".ds-acc { width: 360px; border-top: 1px solid var(--line, #e6e4e0); border-bottom: 1px solid var(--line, #e6e4e0); color: var(--ink, #141414); font-family: Inter, system-ui, sans-serif; } .ds-acc summary { display: flex; justify-content: space-between; align-items: center; min-height: 52px; list-style: none; cursor: pointer; font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; } .ds-acc summary::-webkit-details-marker { display: none; } .ds-acc summary::after { content: ''; width: 9px; height: 9px; background: linear-gradient(currentColor, currentColor) center / 9px 1px no-repeat, linear-gradient(currentColor, currentColor) center / 1px 9px no-repeat; } .ds-acc[open] summary::after { background: linear-gradient(currentColor, currentColor) center / 9px 1px no-repeat; } .ds-acc summary:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; } .ds-spec { margin: 0 0 16px; } .ds-spec-row { display: flex; justify-content: space-between; gap: 24px; padding: 8px 0; font-size: 0.8125rem; } .ds-spec-row dt { color: var(--grey, #6b6b6b); } .ds-spec-row dd { margin: 0; text-align: right; }"
+    },
+    {
+      "name": "Model Rail Item",
+      "kind": "custom",
+      "refersTo": "product-tile",
+      "description": "Square Linen Tile thumbnail with the bag name in small grey Bodoni that turns ink on hover.",
+      "html": "<a href=\"#\" class=\"ds-rail-item\"><span class=\"ds-rail-media\"><span class=\"ds-rail-img\"></span></span><span class=\"ds-rail-name\">Forêt</span></a>",
+      "css": ".ds-rail-item { display: block; width: 96px; text-align: center; text-decoration: none; } .ds-rail-media { display: block; aspect-ratio: 1; background: var(--tile, #f4f3f1); overflow: hidden; } .ds-rail-img { display: block; width: 100%; height: 100%; background: linear-gradient(160deg, #2c3a2e, #c9b98a); transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); } .ds-rail-item:hover .ds-rail-img { transform: scale(1.06); } .ds-rail-name { display: block; margin-top: 10px; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.875rem; color: var(--grey, #6b6b6b); transition: color 0.3s; } .ds-rail-item:hover .ds-rail-name { color: var(--ink, #141414); } .ds-rail-item:focus-visible { outline: 2px solid var(--ink, #141414); outline-offset: 3px; }"
+    },
+    {
+      "name": "Order Band",
+      "kind": "custom",
+      "refersTo": "order-band",
+      "description": "The page's single black surface: Bodoni headline, Night Veil copy, light bar, handle.",
+      "html": "<section class=\"ds-band\"><h2 class=\"ds-band-title\">Poručite svoju torbu</h2><p class=\"ds-band-desc\">Pišite nam na Instagramu za porudžbinu. Lično preuzimanje u Beogradu.</p><a href=\"#\" class=\"ds-band-handle\">@nite.studio_</a></section>",
+      "css": ".ds-band { background: var(--night, #111111); color: var(--paper, #ffffff); padding: 88px 32px; text-align: center; } .ds-band-title { margin: 0; font-family: 'Bodoni Moda', Georgia, serif; font-size: 3rem; font-weight: 400; line-height: 1.05; } .ds-band-desc { margin: 16px auto 24px; max-width: 40em; font-family: Inter, system-ui, sans-serif; font-size: 0.9375rem; line-height: 1.7; color: rgba(255, 255, 255, 0.72); } .ds-band-handle { font-family: Inter, system-ui, sans-serif; font-size: 0.8125rem; color: rgba(255, 255, 255, 0.72); text-decoration: none; transition: color 0.3s; } .ds-band-handle:hover { color: #ffffff; } .ds-band-handle:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Maison Line Sheet",
+    "overview": "NITÉ is presented the way a leather-goods house lists its bags: a white page, square pale tiles, a tiny tracked-uppercase voice for every fact, and a few quiet Bodoni words. The pieces are the only colour on the page. Nothing frames them, labels them as special or pushes them; a bag's name, its piece number, its type and its price sit under the photograph in the same small capitals a Polène or Fendi listing uses, and the whole system gets out of the way so the stitch reads.\n\nDensity is catalogue density: narrow gutters, an 8px gap between tiles, hairline rules instead of boxes, and generous vertical pauses (96px) only where the page switches from listing to editorial. The world is flat and square: no radii, no shadows, no gradients, no accent colour. Hierarchy comes from scale contrast between light Bodoni and 11px Inter capitals, and from one black surface (the order band and the order bar) that marks where buying happens.\n\nMotion is slow and soft (a long ease-out), and always optional: tiles crossfade to a second view of the same bag, the product panel rises 14px into place, sections fade in. The confirmed anti-reference is craft-fair rustic: no kraft paper, twine, stitched borders, or handwritten type. Handmade is carried by the photography, never by decoration.",
+    "keyCharacteristics": [
+      "White paper, pale warm-grey tiles, near-black ink, one grey for meta; no accent colour.",
+      "Bodoni Moda for the wordmark, titles and product names at weight 400; Inter for everything else.",
+      "One label voice: 11px Inter, 500, tracked 0.09em, uppercase.",
+      "Square everything, 1px hairlines, no shadows.",
+      "Flat full-width button bars: black on white, white on black.",
+      "A giant Bodoni NITÉ running gutter to gutter closes every page."
+    ],
+    "rules": [
+      { "name": "The Pieces Are The Colour Rule", "body": "No accent, brand tint, or per-bag colour band appears in the interface. If a surface needs emphasis, it gets ink or night, never a hue.", "section": "colors" },
+      { "name": "The One Grey Rule", "body": "Secondary text uses Catalogue Grey on light surfaces and Night Veil on black; no other text greys exist.", "section": "colors" },
+      { "name": "The Single Label Voice Rule", "body": "Every small fact on the page speaks in the same tracked capitals (0.6875rem, 0.09em). Add new labels to that shared voice; never invent a second small-caps size.", "section": "typography" },
+      { "name": "The Light Didone Rule", "body": "Bodoni titles are weight 400. Weight 500 is reserved for the NITÉ wordmark in the header and footer.", "section": "typography" },
+      { "name": "The Paper Stack Rule", "body": "Layers are opaque full surfaces divided by hairlines; nothing floats, glows, or casts.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do let the bags carry all colour: interface surfaces are only paper, tile, ink, grey, line and night.",
+      "Do put every product image on a Linen Tile (#f4f3f1) slot at a fixed aspect ratio (4:5 in the grid, 1:1 in the rail).",
+      "Do set every small fact in the shared label voice (0.6875rem, 500, 0.09em, uppercase).",
+      "Do keep Bodoni titles at weight 400; reserve 500 for the NITÉ wordmark.",
+      "Do divide with 1px Hairline rules and space, never with boxes or cards.",
+      "Do use the flat full-width button bar for the ordering action, dark on white and light on black.",
+      "Do use the long ease-out (cubic-bezier(0.16, 1, 0.3, 1)) and keep fades when reduced motion is requested, dropping travel and scale.",
+      "Do keep hit targets at 44px minimum and the grey at or above 4.8:1 on its surface."
+    ],
+    "donts": [
+      "Don't round corners or add shadows to any surface, image or control.",
+      "Don't introduce an accent colour, brass, or per-bag colour bands.",
+      "Don't add badges, ribbons, \"UNIKAT\" tags, countdowns or scarcity labels to tiles or the product panel.",
+      "Don't use craft-fair rustic cues: kraft paper, twine, stitched borders, or handwritten fonts.",
+      "Don't add a second small-caps size or tracking value for labels.",
+      "Don't replace Bodoni Moda or Inter with system faces for display or labels."
+    ]
+  }
+}

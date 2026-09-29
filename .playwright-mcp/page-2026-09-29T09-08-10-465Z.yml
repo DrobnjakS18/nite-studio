@@ -1,0 +1,143 @@
+- generic [ref=e2]:
+  - link "Preskoči na sadržaj" [ref=e3] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - navigation "Glavna navigacija" [ref=e6]:
+        - link "Kolekcija" [ref=e7] [cursor=pointer]:
+          - /url: "#collection"
+        - link "Ručna izrada" [ref=e8] [cursor=pointer]:
+          - /url: "#made"
+        - link "O imenu" [ref=e9] [cursor=pointer]:
+          - /url: "#manifesto"
+      - link "NITÉ, početak stranice" [ref=e10] [cursor=pointer]:
+        - /url: "#top"
+        - text: NITÉ
+      - generic [ref=e11]:
+        - link "Porudžbina" [ref=e12] [cursor=pointer]:
+          - /url: "#connect"
+        - link "NITÉ na Instagramu" [ref=e13] [cursor=pointer]:
+          - /url: https://www.instagram.com/nite.studio_/
+  - main [ref=e18]:
+    - region [ref=e19]:
+      - generic [ref=e20]:
+        - heading "Torbe" [level=1] [ref=e21]
+        - paragraph [ref=e22]: Svaki komad ručno izrađen, u jednom jedinom primerku.
+      - generic [ref=e23]:
+        - link "Olea" [ref=e24] [cursor=pointer]:
+          - /url: "#cacao"
+        - link "Forêt" [ref=e27] [cursor=pointer]:
+          - /url: "#foret"
+        - link "Rubis" [ref=e30] [cursor=pointer]:
+          - /url: "#rubis"
+        - link "Nuage" [ref=e33] [cursor=pointer]:
+          - /url: "#nuage"
+        - link "Marée" [ref=e36] [cursor=pointer]:
+          - /url: "#maree"
+      - generic [ref=e39]:
+        - generic [ref=e40]: 5 komada
+        - generic [ref=e41]: Lično preuzimanje u Beogradu · slanje po Srbiji
+      - generic [ref=e42]:
+        - link "Olea torba Olea Komad Nº 01 · torba 7.900 RSD" [ref=e43] [cursor=pointer]:
+          - /url: "#cacao"
+          - img "Olea torba" [ref=e45]
+          - generic [ref=e46]:
+            - generic [ref=e47]: Olea
+            - generic [ref=e48]: Komad Nº 01 · torba
+            - generic [ref=e49]: 7.900 RSD
+        - link "Forêt torba Forêt Komad Nº 02 · torba 7.900 RSD" [ref=e50] [cursor=pointer]:
+          - /url: "#foret"
+          - img "Forêt torba" [ref=e52]
+          - generic [ref=e53]:
+            - generic [ref=e54]: Forêt
+            - generic [ref=e55]: Komad Nº 02 · torba
+            - generic [ref=e56]: 7.900 RSD
+        - link "Rubis torba Rubis Komad Nº 03 · torba 7.900 RSD" [ref=e57] [cursor=pointer]:
+          - /url: "#rubis"
+          - img "Rubis torba" [ref=e59]
+          - generic [ref=e60]:
+            - generic [ref=e61]: Rubis
+            - generic [ref=e62]: Komad Nº 03 · torba
+            - generic [ref=e63]: 7.900 RSD
+        - link "Nuage klač torbica Nuage Komad Nº 04 · klač torbica 7.900 RSD" [ref=e64] [cursor=pointer]:
+          - /url: "#nuage"
+          - img "Nuage klač torbica" [ref=e66]
+          - generic [ref=e67]:
+            - generic [ref=e68]: Nuage
+            - generic [ref=e69]: Komad Nº 04 · klač torbica
+            - generic [ref=e70]: 7.900 RSD
+        - link "Marée torba Marée Komad Nº 05 · torba 7.900 RSD" [ref=e71] [cursor=pointer]:
+          - /url: "#maree"
+          - img "Marée torba" [ref=e73]
+          - generic [ref=e74]:
+            - generic [ref=e75]: Marée
+            - generic [ref=e76]: Komad Nº 05 · torba
+            - generic [ref=e77]: 7.900 RSD
+    - generic [ref=e79]:
+      - heading "Od konca, sve" [level=2] [ref=e80]
+      - generic [ref=e81]:
+        - paragraph [ref=e82]: Nité dolazi od reči za konac. Svaka torba počinje kao jedna dužina pamučne trake i završava kao nešto što drži svoj oblik, drži svoju težinu i nosi tragove ruke koja ju je napravila.
+        - paragraph [ref=e83]: Nema dve iste
+    - generic [ref=e84]:
+      - generic [ref=e85]:
+        - heading "Svaki bod ručno, jedan po jedan." [level=2] [ref=e86]
+        - paragraph [ref=e87]: Izrađeno heklerskom iglom, nikad mašinom — ručni rad koji fabrička linija u potpunosti preskače. Tekstura je zapis o izradi.
+      - list [ref=e88]:
+        - listitem [ref=e89]:
+          - img "Pamučna traka na dršci i pletenoj ivici torbe Olea, izbliza" [ref=e91]
+          - heading "Pređa" [level=3] [ref=e92]
+          - paragraph [ref=e93]: Pamučna traka, meka na dodir i dovoljno čvrsta da drži oblik bez postave ili ojačanja. Birana po tome kako se ponaša posle godinu dana upotrebe, ne po tome kako izgleda prvog dana.
+        - listitem [ref=e94]:
+          - img "Bobl bod na telu torbe Olea izbliza" [ref=e96]
+          - heading "Vez" [level=3] [ref=e97]
+          - paragraph [ref=e98]: Rađeno u potpunosti ručno, heklerskom iglom. Bobl bod troši mnogo pređe, zato površina ima dubinu koju mašinski rad ne može da dostigne.
+        - listitem [ref=e99]:
+          - img "Biseri i gravirana mesingana pločica na torbi Rubis" [ref=e101]
+          - heading "Završna obrada" [level=3] [ref=e102]
+          - paragraph [ref=e103]: Gornja ivica se zatvara pletenicom, krajevi se uvlače nazad u telo torbe, a mesingana pločica se postavlja poslednja. Ništa nije lepljeno.
+    - generic [ref=e105]:
+      - heading "Poručite svoju torbu" [level=2] [ref=e106]
+      - paragraph [ref=e107]: Pišite nam na Instagramu za porudžbinu. Lično preuzimanje u Beogradu, slanje po Srbiji dogovorom.
+      - link "Pišite nam na Instagramu" [ref=e108] [cursor=pointer]:
+        - /url: https://ig.me/m/nite.studio_
+      - link "@nite.studio_" [ref=e109] [cursor=pointer]:
+        - /url: https://www.instagram.com/nite.studio_/
+  - contentinfo [ref=e110]:
+    - generic [ref=e111]:
+      - generic [ref=e112]:
+        - heading "Kolekcija" [level=2] [ref=e113]
+        - generic [ref=e114]:
+          - link "Olea" [ref=e115] [cursor=pointer]:
+            - /url: "#cacao"
+          - link "Forêt" [ref=e116] [cursor=pointer]:
+            - /url: "#foret"
+          - link "Rubis" [ref=e117] [cursor=pointer]:
+            - /url: "#rubis"
+          - link "Nuage" [ref=e118] [cursor=pointer]:
+            - /url: "#nuage"
+          - link "Marée" [ref=e119] [cursor=pointer]:
+            - /url: "#maree"
+      - generic [ref=e120]:
+        - heading "NITÉ" [level=2] [ref=e121]
+        - generic [ref=e122]:
+          - link "Ručna izrada" [ref=e123] [cursor=pointer]:
+            - /url: "#made"
+          - link "O imenu" [ref=e124] [cursor=pointer]:
+            - /url: "#manifesto"
+          - link "Porudžbina" [ref=e125] [cursor=pointer]:
+            - /url: "#connect"
+      - generic [ref=e126]:
+        - heading "Pratite nas" [level=2] [ref=e127]
+        - generic [ref=e128]:
+          - link "Instagram" [ref=e129] [cursor=pointer]:
+            - /url: https://www.instagram.com/nite.studio_/
+          - link "Facebook" [ref=e130] [cursor=pointer]:
+            - /url: https://www.facebook.com/profile.php?id=61588795424576
+          - link "TikTok" [ref=e131] [cursor=pointer]:
+            - /url: https://www.tiktok.com/@nite_studio
+      - generic [ref=e132]:
+        - heading "Nega" [level=2] [ref=e133]
+        - paragraph [ref=e134]: Čistiti samo lokalno. Čuvati napunjenu, ne presavijenu.
+    - generic [ref=e135]:
+      - paragraph [aria-hidden] [ref=e136]: NITÉ
+      - paragraph [ref=e137]: NITÉ, Beograd. Svaka torba izrađena ručno. © 2026
