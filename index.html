@@ -48,10 +48,10 @@
     />
     <meta name="twitter:image" content="https://nitestudio.rs/assets/cacao.jpg" />
     <script>document.documentElement.classList.add('js');</script>
-    <link rel="stylesheet" href="css/fonts.css?v=0.1" />
-    <link rel="stylesheet" href="css/style.css?v=1.8" />
+    <link rel="stylesheet" href="css/fonts.css?v=0.2" />
+    <link rel="stylesheet" href="css/style.css?v=3.5" />
     <script src="js/bags-data.js?v=0.5" defer></script>
-    <script src="js/script.js?v=1.3" defer></script>
+    <script src="js/script.js?v=2.3" defer></script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -194,8 +194,22 @@
           <div class="rail" id="rail"></div>
 
           <div class="toolbar">
-            <span id="pieceCount"></span>
-            <span class="toolbar-note">Lično preuzimanje u Beogradu · slanje po Srbiji</span>
+            <div class="toolbar-start">
+              <span id="pieceCount" aria-live="polite"></span>
+              <div class="filter" id="filter" role="group" aria-label="Filtriraj po vrsti" hidden></div>
+            </div>
+            <div class="toolbar-end">
+              <label class="sort">
+                <span class="sort-label">Sortiraj</span>
+                <select id="sort" class="sort-select">
+                  <option value="default">Preporučeno</option>
+                  <option value="newest">Najnovije</option>
+                  <option value="price-asc">Cena: najniža</option>
+                  <option value="price-desc">Cena: najviša</option>
+                  <option value="name">Naziv A–Ž</option>
+                </select>
+              </label>
+            </div>
           </div>
 
           <div class="grid" id="grid"></div>

@@ -27,7 +27,7 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "Jost", system-ui, sans-serif;
   font-size: 1rem;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -238,7 +238,7 @@ img {
 }
 .catalogue-title {
   margin: 0;
-  font-family: "Bodoni Moda", Georgia, serif;
+  font-family: "Jost", system-ui, sans-serif;
   font-size: clamp(2rem, 3.4vw, 2.75rem);
   font-weight: 400;
   line-height: 1.05;
@@ -266,20 +266,34 @@ img {
   text-underline-offset: 3px;
 }
 
+/* The rail is a strip of portrait thumbnails in the grid's 4:5 crop. A
+   few pieces sit centred; once there are more than fit, it scrolls
+   sideways (auto margins on the ends centre without clipping the start). */
 .rail {
   display: flex;
-  justify-content: center;
-  gap: 32px;
-  padding: 8px var(--gutter) 32px;
+  gap: clamp(20px, 2.6vw, 44px);
+  padding: 20px var(--gutter) 56px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
 }
 .rail-item {
   flex: none;
-  width: 96px;
+  width: clamp(130px, 12vw, 210px);
   text-align: center;
+  scroll-snap-align: start;
+}
+.rail-item:first-child {
+  margin-left: auto;
+}
+.rail-item:last-child {
+  margin-right: auto;
 }
 .rail-media {
   display: block;
-  aspect-ratio: 1;
+  aspect-ratio: 4 / 5;
   background: var(--tile);
   overflow: hidden;
 }
@@ -287,35 +301,51 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.8s var(--ease-out);
+  object-position: 50% 40%;
+  transition: transform 1.2s var(--ease-out);
 }
 .rail-item:hover .rail-media img {
-  transform: scale(1.06);
+  transform: scale(1.04);
 }
 .rail-name {
-  display: block;
-  margin-top: 10px;
+  position: relative;
+  display: inline-block;
+  margin-top: 16px;
+  padding-bottom: 4px;
   font-family: "Bodoni Moda", Georgia, serif;
-  font-size: 0.875rem;
+  font-size: 1.0625rem;
   color: var(--grey);
   transition: color 0.3s;
+}
+.rail-name::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transition: transform 0.6s var(--ease-out);
 }
 .rail-item:hover .rail-name {
   color: var(--ink);
 }
-/* On phones the rail is an index strip: every piece fits the width at
-   once (no scrolling, no half-cut thumbnail), in the grid's 4:5 portrait
-   crop and 8px gap. Items shrink evenly from 72px; fewer pieces stay
-   centred at full size. */
+.rail-item:hover .rail-name::after {
+  transform: scaleX(1);
+}
+/* On phones items shrink evenly from 72px so a handful fit the width at
+   once; past 56px they stop shrinking and the strip scrolls instead. */
 @media (max-width: 899px) {
   .rail {
     gap: 8px;
     padding: 4px var(--gutter) 28px;
+    scrollbar-width: none;
   }
   .rail-item {
     flex: 0 1 72px;
     width: auto;
-    min-width: 0;
+    min-width: 56px;
     -webkit-tap-highlight-color: transparent;
   }
   .rail-media {
@@ -325,7 +355,9 @@ img {
     object-position: 50% 40%;
   }
   .rail-name {
+    display: block;
     margin-top: 8px;
+    padding-bottom: 0;
     font-size: 0.8125rem;
     white-space: nowrap;
     overflow: hidden;
@@ -335,6 +367,9 @@ img {
     opacity: 0.72;
     transition: opacity 0.1s;
   }
+  .rail-name::after {
+    display: none;
+  }
   .rail-item:active .rail-name {
     color: var(--ink);
   }
@@ -342,15 +377,117 @@ img {
 
 .toolbar {
   margin: 0 var(--gutter);
-  padding: 14px 0;
+  padding: 10px 0;
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 8px 24px;
   border-top: 1px solid var(--line);
   color: var(--grey);
 }
-@media (max-width: 599px) {
+
+.toolbar-start,
+.toolbar-end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+}
+/* The count carries a zero-height, invisible copy of its longest possible
+   label (data-max, set by script.js), so its width never changes. */
+#pieceCount {
+  display: inline-flex;
+  flex-direction: column;
+  font-variant-numeric: tabular-nums;
+}
+#pieceCount::after {
+  content: attr(data-max);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  white-space: nowrap;
+}
+@media (max-width: 1199px) {
   .toolbar-note {
+    display: none;
+  }
+}
+
+/* Type filter: text chips; the active one is ink and underlined. */
+.filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 4px;
+}
+.filter[hidden] {
+  display: none;
+}
+.filter-chip {
+  padding: 6px 8px;
+  border: 0;
+  background: none;
+  color: var(--grey);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-decoration: underline transparent;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  transition:
+    color 0.3s,
+    text-decoration-color 0.3s;
+}
+@media (hover: hover) {
+  .filter-chip:hover {
+    color: var(--ink);
+  }
+}
+.filter-chip[aria-pressed="true"] {
+  color: var(--ink);
+  text-decoration-color: currentColor;
+}
+
+/* Sort: a native select dressed as a caps label, with a CSS chevron. */
+.sort {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sort::after {
+  content: "";
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-right: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+.sort-select {
+  appearance: none;
+  padding: 6px 18px 6px 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+/* Browsers show the select's focus ring even on a mouse click, so it gets
+   a quieter one: 1px grey (still 5.3:1 on paper). */
+.sort-select:focus-visible {
+  outline: 1px solid var(--grey);
+}
+@media (max-width: 599px) {
+  .toolbar {
+    gap: 4px 16px;
+  }
+  .sort-label {
     display: none;
   }
 }
@@ -443,7 +580,7 @@ img {
 }
 .story-title {
   margin: 0;
-  font-family: "Bodoni Moda", Georgia, serif;
+  font-family: "Jost", system-ui, sans-serif;
   font-size: clamp(2rem, 4.4vw, 3.75rem);
   font-weight: 400;
   line-height: 1.02;
@@ -475,7 +612,7 @@ img {
 }
 .made-title {
   margin: 0;
-  font-family: "Bodoni Moda", Georgia, serif;
+  font-family: "Jost", system-ui, sans-serif;
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 400;
   line-height: 1.1;
@@ -498,7 +635,7 @@ img {
   gap: 8px;
 }
 .hand-photo {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 3 / 2;
   background: var(--tile);
   overflow: hidden;
 }
@@ -553,9 +690,6 @@ img {
     gap: 40px;
     margin-top: 32px;
   }
-  .hand-photo {
-    aspect-ratio: 3 / 2;
-  }
 }
 
 /* ORDER BAND */
@@ -573,7 +707,7 @@ img {
 }
 .order-title {
   margin: 0;
-  font-family: "Bodoni Moda", Georgia, serif;
+  font-family: "Jost", system-ui, sans-serif;
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 400;
   line-height: 1.05;
@@ -844,15 +978,147 @@ img {
   width: 100%;
   padding: 0;
   border: 0;
-  background: var(--tile);
+  /* background: var(--tile); */
+  background: white;
   cursor: zoom-in;
 }
+/* Each photo fits the window below the bar, so it's seen whole without
+   scrolling; narrower than its column, it's letterboxed. */
 .gallery-item img {
   width: 100%;
   height: auto;
+  max-height: calc(100vh - var(--bar-h) - 16px);
+  max-height: calc(100dvh - var(--bar-h) - 16px);
+  object-fit: contain;
 }
 .gallery-item:focus-visible {
   outline-offset: -4px;
+}
+/* Leaves room for the sticky bar when a thumbnail scrolls a photo to the top. */
+.gallery-item {
+  scroll-margin-top: calc(var(--bar-h) + 8px);
+}
+
+/* Thumbnail navigator: a sticky column beside the photos on desktop (up
+   arrow, thumbnails, down arrow, position), a row under the swipe strip on
+   phones. The photos hug the column instead of floating in the middle. */
+.product-media--thumbs {
+  --thumb-w: clamp(80px, 6.5vw, 128px);
+  display: grid;
+  grid-template-columns: calc(var(--thumb-w) + 24px) minmax(0, 1fr);
+  align-items: start;
+}
+.product-media--thumbs .gallery-item img {
+  object-position: left center;
+}
+.gallery-nav {
+  position: sticky;
+  top: var(--bar-h);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  max-height: calc(100vh - var(--bar-h));
+  max-height: calc(100dvh - var(--bar-h));
+  padding: 8px 0 16px 16px;
+}
+.gallery-thumbs {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: var(--thumb-w);
+  min-height: 0;
+  padding: 2px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+.gallery-thumbs::-webkit-scrollbar {
+  display: none;
+}
+.gallery-thumb {
+  flex: none;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  padding: 0;
+  border: 0;
+  background: var(--tile);
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.5;
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  transition:
+    opacity 0.35s var(--ease-out),
+    outline-color 0.35s var(--ease-out);
+}
+.gallery-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--ease-out);
+}
+.gallery-thumb[aria-current="true"] {
+  opacity: 1;
+  outline-color: var(--ink);
+}
+@media (hover: hover) {
+  .gallery-thumb:hover {
+    opacity: 1;
+  }
+  .gallery-thumb:hover img {
+    transform: scale(1.08);
+  }
+}
+.gallery-thumb:focus-visible {
+  opacity: 1;
+  outline: 1px solid var(--grey);
+  outline-offset: 2px;
+}
+/* Step arrows: the shared chevron, flipped for "previous". */
+.gallery-step {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+.gallery-step svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 1.2;
+}
+.gallery-step--prev svg {
+  transform: rotate(180deg);
+}
+.gallery-step:disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+@media (hover: hover) {
+  .gallery-step:not(:disabled):hover {
+    opacity: 0.6;
+  }
+}
+.gallery-pos {
+  margin: 4px 0 0;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  font-variant-numeric: tabular-nums;
+  color: var(--grey);
+}
+#galleryPos {
+  color: var(--ink);
 }
 .gallery-count {
   display: none;
@@ -865,7 +1131,7 @@ img {
 }
 .product-name {
   margin: 0;
-  font-family: "Bodoni Moda", Georgia, serif;
+  font-family: "Jost", system-ui, sans-serif;
   font-size: clamp(2rem, 2.8vw, 2.5rem);
   font-weight: 400;
   line-height: 1.05;
@@ -958,13 +1224,24 @@ img {
   line-height: 1.6;
   color: var(--grey);
 }
+.product-pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 24px;
+  margin-top: 28px;
+}
 .product-next {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  margin-top: 28px;
   text-decoration: underline;
   text-underline-offset: 4px;
+}
+/* Next stays on the right even when it's the only link. */
+.product-page--next {
+  margin-left: auto;
+  text-align: right;
 }
 
 @media (max-width: 899px) {
@@ -985,6 +1262,38 @@ img {
   .gallery-item {
     flex: 0 0 100%;
     scroll-snap-align: start;
+  }
+  .product-media--thumbs {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .product-media--thumbs .gallery-item img {
+    object-position: center;
+  }
+  .gallery-nav {
+    order: 2;
+    position: static;
+    max-height: none;
+    padding: 10px 0 0;
+  }
+  .gallery-step,
+  .gallery-pos {
+    display: none;
+  }
+  .gallery-thumbs {
+    flex-direction: row;
+    gap: 8px;
+    width: 100%;
+    padding: 2px var(--gutter);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .gallery-thumb {
+    width: 56px;
+  }
+  .product-media--thumbs .gallery-count {
+    order: 1;
   }
   .gallery-item img {
     height: min(125vw, 68vh);
@@ -1090,5 +1399,8 @@ img {
   .rail-item:hover .rail-media img,
   .tile:not(.tile--has-alt):hover .tile-img {
     transform: none;
+  }
+  .rail-name::after {
+    transition: none;
   }
 }

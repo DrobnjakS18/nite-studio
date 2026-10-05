@@ -29,7 +29,8 @@
   const SIZES = {
     feature: '(max-width: 1023px) 100vw, 50vw',
     tile: '(max-width: 1023px) 50vw, 25vw',
-    rail: '96px',
+    rail: '(max-width: 899px) 72px, 210px',
+    thumb: '(max-width: 899px) 56px, 128px',
     gallery: '(max-width: 899px) 100vw, 60vw',
   };
 
@@ -61,8 +62,6 @@
       return;
     }
 
-    document.getElementById('pieceCount').textContent = count === 1 ? '1 komad' : `${count} komada`;
-
     rail.innerHTML = BAGS.map((bag) => `
       <a href="#${bag.id}" class="rail-item">
         <span class="rail-media">${img(bag, bag.images[0], SIZES.rail, '')}</span>
@@ -70,11 +69,71 @@
       </a>
     `).join('');
 
+    renderFilter();
+    renderGrid();
+
+    document.getElementById('navBags').innerHTML = BAGS
+      .map((bag) => `<a href="#${bag.id}" class="close-menu nav-link">${bag.name}</a>`)
+      .join('');
+    document.getElementById('footerCollectionLinks').innerHTML = BAGS
+      .map((bag) => `<a href="#${bag.id}" class="footer-link">${bag.name}</a>`)
+      .join('');
+  }
+
+  // ---------------------------------------------------------------------
+  // Grid filter and sort. Types come from each bag's altNoun, so a new kind
+  // of piece gets its own filter chip without touching this code; with a
+  // single type the filter stays hidden. Both only reorder/hide grid tiles
+  // — the rail, menu and "Sledeći komad" keep the BAGS order.
+
+  const sortSelect = document.getElementById('sort');
+  const filterEl = document.getElementById('filter');
+  let activeType = 'all';
+
+  // "7.900 RSD" → 7900
+  function priceValue(bag) {
+    return Number(String(bag.price).replace(/\D/g, '')) || 0;
+  }
+  const SORTS = {
+    default: null,
+    newest: (a, b) => Number(b.num) - Number(a.num),
+    'price-asc': (a, b) => priceValue(a) - priceValue(b),
+    'price-desc': (a, b) => priceValue(b) - priceValue(a),
+    name: (a, b) => a.name.localeCompare(b.name, 'sr'),
+  };
+
+  function visibleBags() {
+    const list = BAGS.filter((bag) => activeType === 'all' || bag.altNoun === activeType);
+    const compare = SORTS[sortSelect.value];
+    return compare ? list.slice().sort(compare) : list;
+  }
+
+  function renderFilter() {
+    const types = [...new Set(BAGS.map((bag) => bag.altNoun))];
+    filterEl.hidden = types.length < 2;
+    if (filterEl.hidden) return;
+    filterEl.innerHTML = [['all', 'Sve'], ...types.map((t) => [t, t])]
+      .map(([value, label]) => `<button type="button" class="filter-chip" data-type="${esc(value)}" aria-pressed="${value === activeType}">${esc(label)}</button>`)
+      .join('');
+  }
+
+  function renderGrid() {
+    const grid = document.getElementById('grid');
+    const list = visibleBags();
+    const shown = list.length;
+    const pieceCount = document.getElementById('pieceCount');
+    pieceCount.textContent =
+      (shown === 1 ? '1 komad' : `${shown} komada`) + (shown < count ? ` od ${count}` : '');
+    // The longest label this catalogue can show; CSS reserves its width so
+    // the filter chips beside the count don't shift as it changes.
+    pieceCount.dataset.max = `${count} komada od ${count}`;
+
     // The first piece gets a 2×2 feature tile only when the remaining four
-    // fill the rows beside it; any other count falls back to equal tiles.
-    const featureFirst = count === 5;
+    // fill the rows beside it, and only in the curated (unfiltered, default)
+    // view; anything else falls back to equal tiles.
+    const featureFirst = shown === 5 && sortSelect.value === 'default' && activeType === 'all';
     grid.classList.toggle('grid--feature', featureFirst);
-    grid.innerHTML = BAGS.map((bag, i) => {
+    grid.innerHTML = list.map((bag, i) => {
       const views = uniqueImages(bag);
       const feature = featureFirst && i === 0;
       const sizes = feature ? SIZES.feature : SIZES.tile;
@@ -95,13 +154,20 @@
         </a>
       `;
     }).join('');
+  }
 
-    document.getElementById('navBags').innerHTML = BAGS
-      .map((bag) => `<a href="#${bag.id}" class="close-menu nav-link">${bag.name}</a>`)
-      .join('');
-    document.getElementById('footerCollectionLinks').innerHTML = BAGS
-      .map((bag) => `<a href="#${bag.id}" class="footer-link">${bag.name}</a>`)
-      .join('');
+  // Wired only when there is a catalogue; with no bags the toolbar is gone.
+  if (hasBags) {
+    filterEl.addEventListener('click', (e) => {
+      const chip = e.target.closest('.filter-chip');
+      if (!chip || chip.dataset.type === activeType) return;
+      activeType = chip.dataset.type;
+      filterEl.querySelectorAll('.filter-chip').forEach((c) => {
+        c.setAttribute('aria-pressed', String(c === chip));
+      });
+      renderGrid();
+    });
+    sortSelect.addEventListener('change', renderGrid);
   }
 
   renderCatalogue();
@@ -174,13 +240,35 @@
   function productHtml(bag) {
     const views = uniqueImages(bag);
     const alt = bagAlt(bag);
-    const next = BAGS[(BAGS.indexOf(bag) + 1) % count];
+    const index = BAGS.indexOf(bag);
+    const next = BAGS[(index + 1) % count];
+    const prev = BAGS[(index - 1 + count) % count];
 
     const gallery = views.map((src, i) => `
       <button type="button" class="gallery-item" data-src="${src}" data-alt="${esc(`${alt}, prikaz ${i + 1}`)}" aria-label="Uvećaj fotografiju ${i + 1} od ${views.length}">
         ${img(bag, src, SIZES.gallery, `${alt}, prikaz ${i + 1}`, { loading: i === 0 ? 'eager' : 'lazy' })}
       </button>
     `).join('');
+
+    // Thumbnail navigator beside the gallery (a row below it on phones),
+    // only when there is more than one photo to move between: step arrows,
+    // the thumbnails themselves and a position counter.
+    const pad = (n) => String(n).padStart(2, '0');
+    const chevron = '<svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 5.5 7 9.5l4-4"/></svg>';
+    const thumbs = views.length > 1 ? `
+      <div class="gallery-nav">
+        <button type="button" class="gallery-step gallery-step--prev" id="galleryPrev" aria-label="Prethodna fotografija" disabled>${chevron}</button>
+        <div class="gallery-thumbs" id="galleryThumbs" role="group" aria-label="Fotografije">
+          ${views.map((src, i) => `
+            <button type="button" class="gallery-thumb" data-index="${i}" aria-label="Prikaži fotografiju ${i + 1} od ${views.length}"${i === 0 ? ' aria-current="true"' : ' tabindex="-1"'}>
+              ${img(bag, src, SIZES.thumb, '', { loading: 'eager' })}
+            </button>
+          `).join('')}
+        </div>
+        <button type="button" class="gallery-step gallery-step--next" id="galleryNext" aria-label="Sledeća fotografija">${chevron}</button>
+        <p class="gallery-pos" aria-hidden="true"><span id="galleryPos">01</span> / ${pad(views.length)}</p>
+      </div>
+    ` : '';
 
     // Size is part of every buying decision, so the row is always present;
     // bags still missing measurements in BAGS say so instead of hiding it.
@@ -198,7 +286,8 @@
     `;
 
     return `
-      <div class="product-media">
+      <div class="product-media${thumbs ? ' product-media--thumbs' : ''}">
+        ${thumbs}
         <div class="product-gallery" id="productGallery">
           ${gallery}
         </div>
@@ -221,17 +310,29 @@
           </dl>
         </details>
         ${dims}
-        ${count > 1 ? `<a href="#${next.id}" class="product-next" id="productNext">Sledeći komad: ${next.name}</a>` : ''}
+        ${count > 1 ? `
+          <nav class="product-pager" aria-label="Ostali komadi">
+            ${count > 2 ? `<a href="#${prev.id}" class="product-next product-page product-page--prev">Prethodni komad: ${prev.name}</a>` : ''}
+            <a href="#${next.id}" class="product-next product-page product-page--next">Sledeći komad: ${next.name}</a>
+          </nav>` : ''}
       </div>
     `;
   }
 
+  // Tracks which photo is in view to highlight its thumbnail; replaced on
+  // every render so it never observes a panel that is gone.
+  let galleryObserver = null;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const phoneLayout = window.matchMedia('(max-width: 899px)');
+
   function wireGallery() {
     const gallery = document.getElementById('productGallery');
     const index = document.getElementById('galleryIndex');
-    gallery.querySelectorAll('.gallery-item').forEach((el) => {
+    const items = [...gallery.querySelectorAll('.gallery-item')];
+    items.forEach((el) => {
       el.addEventListener('click', () => openImage(el.dataset.src, el.dataset.alt, el));
     });
+    wireThumbs(items);
     // On phones the gallery is a horizontal swipe strip; keep its counter
     // in step with whichever photo is snapped into view.
     if (index) {
@@ -240,6 +341,84 @@
         index.textContent = String(Math.round(gallery.scrollLeft / gallery.clientWidth) + 1);
       }, { passive: true });
     }
+  }
+
+  // Clicking a thumbnail scrolls its photo into view: down the panel on
+  // desktop, along the swipe strip on phones (without moving the panel).
+  // The arrows step one photo; inside the strip, arrow keys/Home/End move
+  // between thumbnails (only the current one is in the Tab order).
+  function wireThumbs(items) {
+    galleryObserver?.disconnect();
+    galleryObserver = null;
+    const strip = document.getElementById('galleryThumbs');
+    if (!strip) return;
+    const thumbs = [...strip.querySelectorAll('.gallery-thumb')];
+    const prevBtn = document.getElementById('galleryPrev');
+    const nextBtn = document.getElementById('galleryNext');
+    const pos = document.getElementById('galleryPos');
+    const last = thumbs.length - 1;
+    let active = 0;
+
+    function setActive(i) {
+      active = i;
+      thumbs.forEach((t, n) => {
+        if (n === i) {
+          t.setAttribute('aria-current', 'true');
+          t.removeAttribute('tabindex');
+        } else {
+          t.removeAttribute('aria-current');
+          t.tabIndex = -1;
+        }
+      });
+      prevBtn.disabled = i === 0;
+      nextBtn.disabled = i === last;
+      pos.textContent = String(i + 1).padStart(2, '0');
+      // Keep the active thumb visible inside the strip itself (scrollIntoView
+      // would also move the panel behind it).
+      const t = thumbs[i];
+      if (t.offsetTop < strip.scrollTop) strip.scrollTop = t.offsetTop;
+      else if (t.offsetTop + t.offsetHeight > strip.scrollTop + strip.clientHeight) {
+        strip.scrollTop = t.offsetTop + t.offsetHeight - strip.clientHeight;
+      }
+      if (t.offsetLeft < strip.scrollLeft) strip.scrollLeft = t.offsetLeft;
+      else if (t.offsetLeft + t.offsetWidth > strip.scrollLeft + strip.clientWidth) {
+        strip.scrollLeft = t.offsetLeft + t.offsetWidth - strip.clientWidth;
+      }
+    }
+
+    function goTo(i) {
+      const target = Math.max(0, Math.min(last, i));
+      setActive(target);
+      items[target].scrollIntoView({
+        behavior: reduceMotion.matches ? 'auto' : 'smooth',
+        block: phoneLayout.matches ? 'nearest' : 'start',
+        inline: 'start',
+      });
+    }
+
+    thumbs.forEach((thumb, i) => thumb.addEventListener('click', () => goTo(i)));
+    prevBtn.addEventListener('click', () => goTo(active - 1));
+    nextBtn.addEventListener('click', () => goTo(active + 1));
+
+    const KEYS = { ArrowUp: -1, ArrowLeft: -1, ArrowDown: 1, ArrowRight: 1 };
+    strip.addEventListener('keydown', (e) => {
+      let i;
+      if (e.key in KEYS) i = active + KEYS[e.key];
+      else if (e.key === 'Home') i = 0;
+      else if (e.key === 'End') i = last;
+      else return;
+      e.preventDefault();
+      goTo(i);
+      thumbs[active].focus();
+    });
+
+    // A photo counts as current once half of it is visible.
+    galleryObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) setActive(items.indexOf(entry.target));
+      });
+    }, { threshold: 0.5 });
+    items.forEach((el) => galleryObserver.observe(el));
   }
 
   // ig.me cannot prefill a message, so tapping the order bar copies one that
@@ -268,10 +447,12 @@
     // Paging through pieces replaces the history entry (keeping its depth),
     // so one Back (or closing) returns to where the panel was opened from
     // rather than the last piece.
-    document.getElementById('productNext')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      history.replaceState(history.state, '', e.currentTarget.getAttribute('href'));
-      syncFromHash();
+    product.querySelectorAll('.product-page').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        history.replaceState(history.state, '', e.currentTarget.getAttribute('href'));
+        syncFromHash();
+      });
     });
     product.scrollTop = 0;
     if (!productOpen) {
